@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "customConditions": ["node"],
+    "strict": true,
+    "experimentalDecorators": false,
+    "noUnusedLocals": true,
+    "noUnusedParameters": false,
+    "jsx": "react-jsx",
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": false,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "preserveConstEnums": true,
+    "skipLibCheck": true,
+    "isolatedModules": true,
+    "types": ["node", "react"]
+  }
+}

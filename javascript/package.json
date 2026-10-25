@@ -1,9 +1,15 @@
 {
   "name": "javascript",
   "version": "1.0.0",
+  "type": "module",
   "main": "index.js",
   "private": "true",
   "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^26.6.5",
+    "tsx": "4.22.4",
+    "typescript": "^5.8.2"
+  },
   "workspaces": [
     "packages/*",
     "packages/*/*",
