@@ -1,0 +1,13 @@
+{
+  "name": "@nix/nixalor-notes-ui",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "private": true,
+  "dependencies": {
+    "@excalidraw/excalidraw": "^0.18.1"
+  }
+}
