@@ -100,11 +100,11 @@ const editorTheme = EditorView.theme({
     objectFit: "contain",
     borderRadius: "8px",
   },
-  ".cm-image-frame:hover, .cm-image-resizing .cm-image-frame": {
+  ".cm-media-frame:hover, .cm-media-resizing .cm-media-frame": {
     outline: "2px solid color-mix(in srgb, var(--accent) 60%, transparent)",
     outlineOffset: "2px",
   },
-  ".cm-image-toolbar": {
+  ".cm-media-toolbar": {
     position: "absolute",
     top: "8px",
     right: "8px",
@@ -117,7 +117,7 @@ const editorTheme = EditorView.theme({
     boxShadow: "var(--shadow-popover)",
     lineHeight: "normal",
   },
-  ".cm-image-toolbar button": {
+  ".cm-media-toolbar button": {
     display: "inline-flex",
     alignItems: "center",
     justifyContent: "center",
@@ -129,16 +129,16 @@ const editorTheme = EditorView.theme({
     color: "var(--text-secondary)",
     cursor: "pointer",
   },
-  ".cm-image-toolbar button:hover:not(:disabled)": {
+  ".cm-media-toolbar button:hover:not(:disabled)": {
     backgroundColor: "var(--surface-selected)",
     color: "var(--text)",
   },
-  ".cm-image-toolbar button[aria-pressed=true]": {
+  ".cm-media-toolbar button[aria-pressed=true]": {
     backgroundColor: "var(--accent-soft-bg)",
     color: "var(--accent)",
   },
-  ".cm-image-toolbar button:disabled": { opacity: "0.35", cursor: "default" },
-  ".cm-image-handle": {
+  ".cm-media-toolbar button:disabled": { opacity: "0.35", cursor: "default" },
+  ".cm-media-handle": {
     position: "absolute",
     right: "6px",
     bottom: "6px",
@@ -150,7 +150,7 @@ const editorTheme = EditorView.theme({
     borderBottomRightRadius: "4px",
     cursor: "nwse-resize",
   },
-  ".cm-image[data-align=right] .cm-image-handle": {
+  "[data-align=right] > .cm-media-frame > .cm-media-handle": {
     right: "auto",
     left: "6px",
     borderRight: "none",
@@ -159,7 +159,7 @@ const editorTheme = EditorView.theme({
     borderBottomLeftRadius: "4px",
     cursor: "nesw-resize",
   },
-  ".cm-image-frame:hover .cm-image-toolbar, .cm-image-frame:hover .cm-image-handle, .cm-image-resizing .cm-image-handle":
+  ".cm-media-frame:hover .cm-media-toolbar, .cm-media-frame:hover .cm-media-handle, .cm-media-resizing .cm-media-handle":
     { display: "flex" },
   ".cm-image-missing": { display: "none" },
   // Heading folding: an arrow left of the heading, "…" where the section was.
@@ -191,6 +191,75 @@ const editorTheme = EditorView.theme({
     lineHeight: "1.6",
     verticalAlign: "middle",
     cursor: "pointer",
+  },
+  // Embedded board preview (![[Board]]).
+  ".cm-board-embed": {
+    display: "block",
+    padding: "6px 0",
+    lineHeight: "normal",
+    textAlign: "center",
+  },
+  ".cm-board-embed[data-align=left]": { textAlign: "left" },
+  ".cm-board-embed[data-align=right]": { textAlign: "right" },
+  ".cm-board-embed-frame": {
+    position: "relative",
+    display: "inline-flex",
+    flexDirection: "column",
+    width: "100%",
+    maxWidth: "100%",
+    verticalAlign: "top",
+    textAlign: "left",
+    overflow: "hidden",
+    border: "1px solid var(--border-strong)",
+    borderRadius: "10px",
+    backgroundColor: "var(--surface-1)",
+    cursor: "pointer",
+  },
+  ".cm-board-embed-frame:hover": { borderColor: "var(--accent)" },
+  ".cm-board-embed-preview": {
+    display: "flex",
+    flex: "1 1 auto",
+    alignItems: "center",
+    justifyContent: "center",
+    minHeight: "0",
+    maxHeight: "360px",
+    padding: "16px",
+  },
+  // With an explicit height the preview takes all the room above the caption.
+  ".cm-board-embed-frame[style*=height] .cm-board-embed-preview": { maxHeight: "none" },
+  ".cm-board-embed-preview img": {
+    maxWidth: "100%",
+    maxHeight: "100%",
+    objectFit: "contain",
+    filter: "var(--thumb-filter)",
+  },
+  ".cm-board-embed-empty": { color: "var(--text-faint)", fontSize: "13px" },
+  ".cm-board-embed-caption": {
+    display: "flex",
+    alignItems: "center",
+    gap: "8px",
+    padding: "8px 12px",
+    borderTop: "1px solid var(--border)",
+    color: "var(--text-secondary)",
+    fontSize: "13px",
+    fontWeight: "600",
+  },
+  // "/" command menu icons.
+  ".cm-slash-icon": {
+    display: "inline-flex",
+    alignItems: "center",
+    justifyContent: "center",
+    width: "28px",
+    height: "28px",
+    marginRight: "10px",
+    border: "1px solid var(--border-strong)",
+    borderRadius: "7px",
+    color: "var(--text-secondary)",
+    verticalAlign: "middle",
+  },
+  ".cm-tooltip-autocomplete ul li[aria-selected] .cm-slash-icon": {
+    borderColor: "var(--accent)",
+    color: "var(--accent)",
   },
   ".cm-bullet": { color: "var(--text-muted)", padding: "0 6px 0 2px" },
   ".cm-hr": {

@@ -110,6 +110,7 @@
 }
 
 .content pre {
+  position: relative;
   padding: 12px 14px;
   overflow: auto;
   border-radius: var(--radius-sm);
@@ -147,6 +148,7 @@
 }
 
 /* Alignment within the image's own line — text never wraps around it. */
+
 .content img[data-align="left"] {
   margin-left: 0;
 }
@@ -200,4 +202,109 @@
   font-weight: 500;
   line-height: 1.6;
   vertical-align: middle;
+}
+
+/* Embedded board preview (![[Board|width|align]]). */
+.content :global(.board-embed-row) {
+  display: block;
+  margin: 6px 0 12px;
+  text-align: center;
+}
+
+.content :global(.board-embed-row)[data-align="left"] {
+  text-align: left;
+}
+
+.content :global(.board-embed-row)[data-align="right"] {
+  text-align: right;
+}
+
+.content a:global(.board-embed) {
+  display: inline-flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 100%;
+  vertical-align: top;
+  text-align: left;
+  overflow: hidden;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  background: var(--surface-1);
+  color: var(--text-secondary);
+  text-decoration: none;
+}
+
+.content a:global(.board-embed):hover {
+  border-color: var(--accent);
+}
+
+.content :global(.board-embed-preview) {
+  display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+  max-height: 360px;
+  padding: 16px;
+}
+
+/* With an explicit height the preview takes all the room above the caption. */
+.content a:global(.board-embed)[style*="height"] :global(.board-embed-preview) {
+  max-height: none;
+}
+
+.content :global(.board-embed-preview) img {
+  max-height: 100%;
+  margin: 0;
+  object-fit: contain;
+  filter: var(--thumb-filter);
+}
+
+.content :global(.board-embed-empty) :global(.board-embed-preview) {
+  display: none;
+}
+
+.content :global(.board-embed-caption) {
+  padding: 8px 12px;
+  border-top: 1px solid var(--border);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* Fenced code: language label (top right) and syntax colors, as in the editor. */
+.content :global(.code-language) {
+  position: absolute;
+  top: 6px;
+  right: 10px;
+  color: var(--text-faint);
+  font-family: var(--font-ui);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  user-select: none;
+}
+
+.content :global(.tok-keyword) {
+  color: var(--code-keyword);
+}
+
+.content :global(.tok-string) {
+  color: var(--code-string);
+}
+
+.content :global(.tok-number) {
+  color: var(--code-number);
+}
+
+.content :global(.tok-comment) {
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.content :global(.tok-function) {
+  color: var(--code-function);
+}
+
+.content :global(.tok-property) {
+  color: var(--code-property);
 }

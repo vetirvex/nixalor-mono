@@ -1,6 +1,8 @@
 import { forwardRef, memo, useEffect, useImperativeHandle, useMemo, useRef } from "react";
 import type { MouseEvent } from "react";
 import { getAttachmentUrl } from "../../../../Shared/Utils/attachments";
+import { getBoardPreviewUrl } from "../../../../Shared/Utils/boardPreview";
+import { highlightCodeBlocks } from "../../../../Shared/Utils/highlightCode";
 import { renderMarkdown } from "../../../../Shared/Utils/markdown";
 import classes from "./NoteReader.module.css";
 import type { NoteReaderHandle, NoteReaderProps } from "./NoteReaderTypes";
@@ -45,6 +47,7 @@ const NoteReader = memo(
       {
         content,
         linkExists,
+        resolveBoard,
         onOpenLink,
         onToggleTask,
         emptyText,
@@ -57,8 +60,8 @@ const NoteReader = memo(
       ref
     ) => {
       const html = useMemo(
-        () => renderMarkdown(content, linkExists),
-        [content, linkExists]
+        () => renderMarkdown(content, { exists: linkExists, resolveBoard }),
+        [content, linkExists, resolveBoard]
       );
       const containerRef = useRef<HTMLDivElement>(null);
       const articleRef = useRef<HTMLElement>(null);
@@ -80,6 +83,31 @@ const NoteReader = memo(
               }
             });
           });
+        articleRef.current
+          ?.querySelectorAll<HTMLImageElement>("img[data-board-id]")
+          .forEach((img) => {
+            const id = img.dataset.boardId ?? "";
+            void getBoardPreviewUrl(id, Number(img.dataset.boardUpdated)).then((url) => {
+              if (url) {
+                img.src = url;
+              } else {
+                img.closest("a")?.classList.add("board-embed-empty");
+              }
+            });
+          });
+      }, [html]);
+
+      // Syntax highlighting + language label for fenced code blocks.
+      useEffect(() => {
+        const article = articleRef.current;
+        if (!article) {
+          return;
+        }
+        let cancelled = false;
+        void highlightCodeBlocks(article, () => cancelled);
+        return () => {
+          cancelled = true;
+        };
       }, [html]);
 
       // Fold toggles on headings that have content under them, then hide folded parts.

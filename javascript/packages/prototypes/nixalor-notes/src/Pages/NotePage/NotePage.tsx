@@ -15,6 +15,7 @@ import {
   StarIcon,
 } from "../../Shared/Icons/Icons";
 import { LocalSettings } from "../../Shared/Storage/LocalSettings";
+import { getFileKind } from "../../Shared/Storage/StorageTypes";
 import { Button } from "../../Shared/Ui/Button/Button";
 import { IconButton } from "../../Shared/Ui/IconButton/IconButton";
 import { NameInput } from "../../Shared/Ui/NameInput/NameInput";
@@ -129,6 +130,7 @@ const NotePage = memo<NotePageProps>(({ noteId }) => {
         .filter((d) => d.id !== noteId)
         .map((d) => ({
           name: d.name,
+          kind: getFileKind(d),
           detail: getFolderPath(d.folderId, folders)
             .map((f) => f.name)
             .join(" / "),
@@ -158,6 +160,38 @@ const NotePage = memo<NotePageProps>(({ noteId }) => {
     },
     [createDrawing, drawings, navigate, note?.folderId]
   );
+
+  // ![[name]] embeds a preview when the link points at a board.
+  const resolveBoard = useCallback(
+    (target: string) => {
+      const file = resolveWikiLink(target, drawings);
+      return file && getFileKind(file) === "board"
+        ? { id: file.id, name: file.name, updatedAt: file.updatedAt }
+        : null;
+    },
+    [drawings]
+  );
+
+  const slashLabels = useMemo(() => {
+    type Key = Parameters<typeof t>[0];
+    const command = (id: string) => ({
+      title: t(`note.slash.${id}.title` as Key),
+      hint: t(`note.slash.${id}.hint` as Key),
+      keywords: t(`note.slash.${id}.keywords` as Key),
+    });
+    return {
+      image: command("image"),
+      codeBlock: command("codeBlock"),
+      inlineCode: command("inlineCode"),
+      bulletList: command("bulletList"),
+      numberedList: command("numberedList"),
+      taskList: command("taskList"),
+      table: command("table"),
+      link: command("link"),
+      boardPreview: command("boardPreview"),
+      tableColumn: t("note.slash.table.column"),
+    };
+  }, [t]);
 
   const imageLabels = useMemo(
     () => ({
@@ -301,6 +335,9 @@ const NotePage = memo<NotePageProps>(({ noteId }) => {
                   placeholder={t("note.placeholder")}
                   imageLabels={imageLabels}
                   foldLabel={t("note.fold")}
+                  slashLabels={slashLabels}
+                  resolveBoard={resolveBoard}
+                  boardEmptyText={t("note.boardEmpty")}
                   initialFoldedKeys={foldedKeys}
                   onFoldsChange={handleFoldsChange}
                   onTopLineChange={setTopLine}
@@ -310,6 +347,7 @@ const NotePage = memo<NotePageProps>(({ noteId }) => {
                 <NoteReader
                   ref={readerRef}
                   content={content}
+                  resolveBoard={resolveBoard}
                   headings={headings}
                   foldedKeys={foldedKeys}
                   onToggleFold={toggleReaderFold}

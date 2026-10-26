@@ -58,4 +58,4 @@ const imageHandling = (getNoteId: () => string) =>
     },
   });
 
-export { imageHandling };
+export { imageHandling, insertImages };

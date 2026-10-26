@@ -2,7 +2,7 @@ import DOMPurify from "dompurify";
 import { Marked } from "marked";
 import type { TokenizerAndRendererExtension, Tokens } from "marked";
 import { ATTACHMENT_PREFIX } from "./attachments";
-import { parseImageAlt } from "./imageAlt";
+import { clampMediaSize, parseImageAlt } from "./imageAlt";
 
 interface WikiLinkToken extends Tokens.Generic {
   type: "wikiLink";
@@ -12,6 +12,66 @@ interface WikiLinkToken extends Tokens.Generic {
 
 const escapeHtml = (text: string) =>
   text.replace(/[&<>"']/g, (char) => `&#${char.charCodeAt(0)};`);
+
+interface RenderOptions {
+  exists: (target: string) => boolean;
+  /** Board embedded by `![[name]]`, or null if the target isn't a board. */
+  resolveBoard: (
+    target: string
+  ) => { id: string; name: string; updatedAt: number } | null;
+}
+
+/** `![[Board]]` → a clickable board preview (the reader resolves the image). */
+const createBoardEmbedExtension = ({
+  exists,
+  resolveBoard,
+}: RenderOptions): TokenizerAndRendererExtension => ({
+  name: "boardEmbed",
+  level: "inline",
+  start: (src) => src.indexOf("![["),
+  tokenizer: (src) => {
+    const match = /^!\[\[([^\]|\n]+)(?:\|([^\]\n]+))?\]\]/.exec(src);
+    if (!match?.[1]) {
+      return undefined;
+    }
+    const target = match[1].trim();
+    return {
+      type: "boardEmbed",
+      raw: match[0],
+      target,
+      label: (match[2] ?? match[1]).trim(),
+      options: match[2] ?? "",
+    };
+  },
+  renderer: (token) => {
+    const { target, label, options } = token as Tokens.Generic & {
+      target: string;
+      label: string;
+      options: string;
+    };
+    const board = resolveBoard(target);
+    if (!board) {
+      const missing = exists(target) ? "" : " wikilink-missing";
+      return `<a href="#" class="wikilink${missing}" data-target="${escapeHtml(target)}">${escapeHtml(label)}</a>`;
+    }
+    // Same "|480x300|right" layout options as in the editor.
+    const { width, height, align } = clampMediaSize(
+      "board",
+      parseImageAlt(`|${options}`)
+    );
+    const dimensions = [
+      ...(width ? [`width: ${width}px`] : []),
+      ...(height ? [`height: ${height}px`] : []),
+    ].join("; ");
+    const size = dimensions ? ` style="${dimensions}"` : "";
+    return (
+      `<span class="board-embed-row" data-align="${align}">` +
+      `<a href="#" class="wikilink board-embed" data-target="${escapeHtml(target)}"${size}>` +
+      `<span class="board-embed-preview"><img data-board-id="${escapeHtml(board.id)}" data-board-updated="${board.updatedAt}" alt="${escapeHtml(board.name)}"></span>` +
+      `<span class="board-embed-caption">${escapeHtml(board.name)}</span></a></span>`
+    );
+  },
+});
 
 const createWikiLinkExtension = (
   exists: (target: string) => boolean
@@ -43,15 +103,22 @@ const createWikiLinkExtension = (
  * Renders note Markdown (GFM + Obsidian wiki links) to sanitized HTML.
  * Task checkboxes are left enabled and numbered so the reader can toggle them.
  */
-const renderMarkdown = (content: string, exists: (target: string) => boolean) => {
+const renderMarkdown = (content: string, options: RenderOptions) => {
   const marked = new Marked({ gfm: true, breaks: true });
   marked.use({
-    extensions: [createWikiLinkExtension(exists)],
+    // The embed extension must come first so "![[" isn't read as "!" + a link.
+    extensions: [
+      createBoardEmbedExtension(options),
+      createWikiLinkExtension(options.exists),
+    ],
     renderer: {
       // Embedded images get a data attribute; the reader swaps in their blob URLs.
       image: ({ href, text }) => {
-        const { alt, width, align } = parseImageAlt(text);
-        const size = width ? ` width="${width}"` : "";
+        const { alt, width, height, align } = clampMediaSize(
+          "image",
+          parseImageAlt(text)
+        );
+        const size = `${width ? ` width="${width}"` : ""}${height ? ` height="${height}"` : ""}`;
         const source = href.startsWith(ATTACHMENT_PREFIX)
           ? `data-attachment="${escapeHtml(href.slice(ATTACHMENT_PREFIX.length))}"`
           : `src="${escapeHtml(href)}"`;
@@ -61,7 +128,13 @@ const renderMarkdown = (content: string, exists: (target: string) => boolean) =>
   });
   const html = marked.parse(content, { async: false });
   const clean = DOMPurify.sanitize(html, {
-    ADD_ATTR: ["data-target", "data-attachment", "data-align"],
+    ADD_ATTR: [
+      "data-target",
+      "data-attachment",
+      "data-align",
+      "data-board-id",
+      "data-board-updated",
+    ],
   });
 
   const template = document.createElement("template");
@@ -128,3 +201,4 @@ const markdownToPreviewText = (content: string, maxLines = 8) =>
     );
 
 export { markdownToPreviewText, renderMarkdown, toggleTask };
+export type { RenderOptions };

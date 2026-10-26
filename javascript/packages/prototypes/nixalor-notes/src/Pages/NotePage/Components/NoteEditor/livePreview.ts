@@ -3,8 +3,10 @@ import { StateEffect } from "@codemirror/state";
 import type { EditorState, Range } from "@codemirror/state";
 import { Decoration, EditorView, ViewPlugin, WidgetType } from "@codemirror/view";
 import type { DecorationSet, ViewUpdate } from "@codemirror/view";
-import { parseImageAlt } from "../../../../Shared/Utils/imageAlt";
+import { clampMediaSize, parseImageAlt } from "../../../../Shared/Utils/imageAlt";
 import { WIKI_LINK } from "../../../../Shared/Utils/wikiLinks";
+import { BoardEmbedWidget } from "./boardEmbedWidget";
+import type { EmbeddedBoard } from "./boardEmbedWidget";
 import { ImageWidget } from "./imageWidget";
 import type { ImageLabels } from "./imageWidget";
 
@@ -16,6 +18,9 @@ interface LivePreviewOptions {
   linkExists: (target: string) => boolean;
   onOpenLink: (target: string) => void;
   imageLabels: ImageLabels;
+  /** Board that `![[name]]` embeds, or null if the target isn't a board. */
+  resolveBoard: (target: string) => EmbeddedBoard | null;
+  boardEmptyText: string;
 }
 
 class BulletWidget extends WidgetType {
@@ -164,7 +169,7 @@ const buildDecorations = (view: EditorView, options: LivePreviewOptions) => {
               marks[0] && marks[1] ? state.sliceDoc(marks[0].to, marks[1].from) : "";
             const widget = new ImageWidget(
               state.sliceDoc(url.from, url.to),
-              parseImageAlt(altRaw),
+              clampMediaSize("image", parseImageAlt(altRaw)),
               options.imageLabels
             );
             // Like Obsidian: the image replaces the syntax, which shows up
@@ -269,6 +274,32 @@ const buildDecorations = (view: EditorView, options: LivePreviewOptions) => {
       const target = (match[1] ?? "").trim();
       if (codeRanges.some(([a, b]) => start >= a && end <= b)) {
         continue;
+      }
+      // ![[Board]] embeds a board preview, like Obsidian's embeds.
+      const embedStart = start - 1;
+      const board =
+        state.sliceDoc(embedStart, start) === "!" ? options.resolveBoard(target) : null;
+      if (board) {
+        // "|480x300|right" after the name sets the preview's size and alignment.
+        const { width, height, align } = clampMediaSize(
+          "board",
+          parseImageAlt(`|${match[2] ?? ""}`)
+        );
+        const widget = new BoardEmbedWidget(
+          board,
+          { width, height, align },
+          options.imageLabels,
+          options.boardEmptyText,
+          options.onOpenLink
+        );
+        decorations.push(
+          isActive(start)
+            ? Decoration.widget({ widget, side: 1 }).range(end)
+            : Decoration.replace({ widget }).range(embedStart, end)
+        );
+        if (!isActive(start)) {
+          continue;
+        }
       }
       const className = options.linkExists(target)
         ? "cm-wikilink"

@@ -1,4 +1,6 @@
+import type { EmbeddedBoard } from "./boardEmbedWidget";
 import type { ImageLabels } from "./imageWidget";
+import type { SlashLabels } from "./slashCommands";
 import type { LinkTarget } from "./wikiLinkCompletion";
 
 interface NoteEditorHandle {
@@ -24,6 +26,11 @@ interface NoteEditorProps {
   /** Tooltips of the image alignment / resize controls. */
   imageLabels: ImageLabels;
   foldLabel: string;
+  /** Titles/hints of the "/" command menu. */
+  slashLabels: SlashLabels;
+  /** Board that `![[name]]` embeds, or null if the target isn't a board. */
+  resolveBoard: (target: string) => EmbeddedBoard | null;
+  boardEmptyText: string;
   /** Heading sections folded when the editor opens. */
   initialFoldedKeys: ReadonlySet<string>;
   onFoldsChange: (keys: string[]) => void;

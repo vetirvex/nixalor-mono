@@ -27,6 +27,7 @@ import {
 } from "./markdownCommands";
 import classes from "./NoteEditor.module.css";
 import type { NoteEditorHandle, NoteEditorProps } from "./NoteEditorTypes";
+import { createSlashCompletion, slashIcon } from "./slashCommands";
 import { createWikiLinkCompletion } from "./wikiLinkCompletion";
 
 const NoteEditor = memo(
@@ -42,6 +43,9 @@ const NoteEditor = memo(
         placeholder: hint,
         imageLabels,
         foldLabel,
+        slashLabels,
+        resolveBoard,
+        boardEmptyText,
         initialFoldedKeys,
         onFoldsChange,
         onTopLineChange,
@@ -59,6 +63,9 @@ const NoteEditor = memo(
         linkExists,
         imageLabels,
         foldLabel,
+        slashLabels,
+        resolveBoard,
+        boardEmptyText,
         onFoldsChange,
         onTopLineChange,
       });
@@ -70,6 +77,9 @@ const NoteEditor = memo(
         linkExists,
         imageLabels,
         foldLabel,
+        slashLabels,
+        resolveBoard,
+        boardEmptyText,
         onFoldsChange,
         onTopLineChange,
       };
@@ -86,8 +96,15 @@ const NoteEditor = memo(
               closeBrackets(),
               markdown({ base: markdownLanguage, codeLanguages: languages }),
               autocompletion({
-                override: [createWikiLinkCompletion(() => propsRef.current.linkTargets)],
+                override: [
+                  createWikiLinkCompletion(() => propsRef.current.linkTargets),
+                  createSlashCompletion(
+                    () => propsRef.current.noteId,
+                    () => propsRef.current.slashLabels
+                  ),
+                ],
                 icons: false,
+                addToOptions: [slashIcon],
               }),
               keymap.of([
                 { key: "Mod-b", run: toggleBold },
@@ -110,6 +127,10 @@ const NoteEditor = memo(
                 // A getter, so a language switch reaches widgets drawn later.
                 get imageLabels() {
                   return propsRef.current.imageLabels;
+                },
+                resolveBoard: (target) => propsRef.current.resolveBoard(target),
+                get boardEmptyText() {
+                  return propsRef.current.boardEmptyText;
                 },
               }),
               imageHandling(() => propsRef.current.noteId),

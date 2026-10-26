@@ -6,13 +6,14 @@ import type {
 
 interface LinkTarget {
   name: string;
+  kind: "board" | "note";
   /** Folder path shown next to the name. */
   detail: string;
 }
 
 /**
- * Suggests file names after `[[`. Works with auto-closed brackets: if `]]`
- * already follows the cursor it isn't inserted again.
+ * Suggests file names after `[[` (boards only after `![[`, which embeds a board
+ * preview). Works with auto-closed brackets: an existing `]]` isn't duplicated.
  */
 const createWikiLinkCompletion =
   (getTargets: () => readonly LinkTarget[]) =>
@@ -21,7 +22,9 @@ const createWikiLinkCompletion =
     if (!match) {
       return null;
     }
-    const options: Completion[] = getTargets().map((target) => ({
+    const isEmbed = context.state.sliceDoc(match.from - 1, match.from) === "!";
+    const targets = getTargets().filter((target) => !isEmbed || target.kind === "board");
+    const options: Completion[] = targets.map((target) => ({
       label: target.name,
       detail: target.detail,
       apply: (view, _completion, from, to) => {

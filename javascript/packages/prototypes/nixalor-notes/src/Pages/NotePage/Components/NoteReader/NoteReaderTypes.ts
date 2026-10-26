@@ -1,3 +1,4 @@
+import type { RenderOptions } from "../../../../Shared/Utils/markdown";
 import type { Heading } from "../../../../Shared/Utils/outline";
 
 interface NoteReaderHandle {
@@ -8,6 +9,7 @@ interface NoteReaderHandle {
 interface NoteReaderProps {
   content: string;
   linkExists: (target: string) => boolean;
+  resolveBoard: RenderOptions["resolveBoard"];
   onOpenLink: (target: string) => void;
   onToggleTask: (taskIndex: number) => void;
   emptyText: string;
