@@ -1,0 +1,5 @@
+.main-page-container {
+    width: 100dvw;
+    height: 100vh;
+    display: flex;
+}

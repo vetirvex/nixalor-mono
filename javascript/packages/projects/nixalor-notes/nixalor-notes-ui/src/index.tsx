@@ -1,7 +1,7 @@
-import {createRoot} from "react-dom/client";
-import {App} from "./App";
+import { createRoot } from "react-dom/client";
 import "./Styles/index.css";
+import { MainPage } from "./Pages/MainPage/MainPage";
 
-const rooDom = document.getElementById('root')!;
+const rooDom = document.getElementById("root")!;
 
-createRoot(rooDom).render(<App />);
+createRoot(rooDom).render(<MainPage />);
