@@ -1,11 +1,11 @@
 import { convertToExcalidrawElements, getCommonBounds } from "@excalidraw/excalidraw";
 import type { ExcalidrawElementSkeleton } from "@excalidraw/excalidraw/data/transform";
 import type { MessageKey, MessageParams } from "../I18n/I18nTypes";
+import { getPanelWidth } from "./panelWidths";
 import { buildSceneContent } from "./scene";
 import type { SceneContent } from "./scene";
 
-// Mirrors --sidebar-width and --topbar-height in Tokens.css.
-const SIDEBAR_WIDTH = 272;
+// Mirrors --topbar-height in Tokens.css.
 const TOPBAR_HEIGHT = 56;
 
 type TemplateId = "blank" | "system" | "userFlow" | "mindmap" | "retro";
@@ -157,7 +157,7 @@ const buildTemplateScene = (template: TemplateId, t: Translate): SceneContent | 
   });
   // Center the template in the canvas area (window minus sidebar and top bar).
   const [minX, minY, maxX, maxY] = getCommonBounds(elements);
-  const viewportWidth = window.innerWidth - SIDEBAR_WIDTH;
+  const viewportWidth = window.innerWidth - getPanelWidth("sidebar");
   const viewportHeight = window.innerHeight - TOPBAR_HEIGHT;
   return buildSceneContent(
     elements,

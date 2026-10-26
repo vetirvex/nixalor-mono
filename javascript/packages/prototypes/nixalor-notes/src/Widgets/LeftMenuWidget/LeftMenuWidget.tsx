@@ -8,6 +8,7 @@ import { PlusIcon, SearchIcon, SettingsIcon } from "../../Shared/Icons/Icons";
 import type { Drawing, Folder } from "../../Shared/Storage/StorageTypes";
 import { IconButton } from "../../Shared/Ui/IconButton/IconButton";
 import { Kbd } from "../../Shared/Ui/Kbd/Kbd";
+import { ResizeHandle } from "../../Shared/Ui/ResizeHandle/ResizeHandle";
 import { byName, countBoardsInSubtree } from "../../Shared/Utils/folderTree";
 import { MOD_KEY } from "../../Shared/Utils/platform";
 import { DrawingRow } from "./Components/DrawingRow/DrawingRow";
@@ -90,6 +91,7 @@ const LeftMenuWidget = memo<LeftMenuWidgetProps>(() => {
       aria-hidden={!isSidebarOpen}
       inert={!isSidebarOpen}
     >
+      <ResizeHandle panel="sidebar" edge="right" label={t("panel.resize")} />
       <TreeDndContext.Provider value={dnd}>
         <nav className={classes.panel} aria-label={t("nav.workspace")}>
           <div className={classes.workspace}>

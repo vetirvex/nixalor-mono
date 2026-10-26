@@ -1,4 +1,5 @@
 .left-menu-container {
+  position: relative;
   flex-shrink: 0;
   width: var(--sidebar-width);
   height: 100%;

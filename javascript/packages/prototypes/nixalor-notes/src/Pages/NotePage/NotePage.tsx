@@ -411,6 +411,7 @@ const NotePage = memo<NotePageProps>(({ noteId }) => {
             onSelect={selectHeading}
             title={t("note.outline")}
             emptyText={t("note.outlineEmpty")}
+            resizeLabel={t("panel.resize")}
           />
         )}
       </section>

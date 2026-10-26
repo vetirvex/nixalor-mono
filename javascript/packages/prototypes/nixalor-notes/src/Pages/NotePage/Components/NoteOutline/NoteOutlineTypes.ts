@@ -8,6 +8,7 @@ interface NoteOutlineProps {
   onSelect: (index: number) => void;
   title: string;
   emptyText: string;
+  resizeLabel: string;
 }
 
 export type { NoteOutlineProps };

@@ -1,4 +1,5 @@
 import { memo } from "react";
+import { ResizeHandle } from "../../../../Shared/Ui/ResizeHandle/ResizeHandle";
 import classes from "./NoteOutline.module.css";
 import type { NoteOutlineProps } from "./NoteOutlineTypes";
 
@@ -6,7 +7,7 @@ const INDENT_PX = 14;
 
 /** The note's table of contents, shown on the right like Obsidian's outline. */
 const NoteOutline = memo<NoteOutlineProps>(
-  ({ isOpen, headings, activeIndex, onSelect, title, emptyText }) => {
+  ({ isOpen, headings, activeIndex, onSelect, title, emptyText, resizeLabel }) => {
     const minLevel = Math.min(...headings.map((heading) => heading.level));
 
     return (
@@ -17,6 +18,7 @@ const NoteOutline = memo<NoteOutlineProps>(
         aria-hidden={!isOpen}
         inert={!isOpen}
       >
+        <ResizeHandle panel="outline" edge="left" label={resizeLabel} />
         <div className={classes.panel}>
           <h2 className={classes.title}>{title}</h2>
           {headings.length === 0 ? (

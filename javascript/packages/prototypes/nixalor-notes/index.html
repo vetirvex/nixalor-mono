@@ -26,6 +26,18 @@
         if (settings.language) {
           root.lang = settings.language;
         }
+        // Resized panels (see src/Shared/Utils/panelWidths.ts).
+        [
+          ["sidebarWidth", "--sidebar-width", 275],
+          ["outlineWidth", "--outline-width", 180],
+        ].forEach(function (panel) {
+          try {
+            var width = JSON.parse(localStorage.getItem("nixalor-notes:" + panel[0]));
+            if (typeof width === "number") {
+              root.style.setProperty(panel[1], Math.min(480, Math.max(panel[2], width)) + "px");
+            }
+          } catch (e) {}
+        });
       })();
     </script>
 </head>

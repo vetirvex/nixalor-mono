@@ -93,6 +93,7 @@ const en: Messages = {
   "nav.emptyTree": "No folders or files yet.",
   "nav.emptyFavorites": "Star a file and it will show up here.",
 
+  "panel.resize": "Drag to resize. Double-click to reset",
   "sidebar.hide": "Hide sidebar",
   "sidebar.show": "Show sidebar",
 

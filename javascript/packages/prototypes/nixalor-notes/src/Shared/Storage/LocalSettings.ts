@@ -39,6 +39,12 @@ const LocalSettings = {
   getExpandedFolderIds: () => read<string[]>("expandedFolderIds", []),
   setExpandedFolderIds: (ids: string[]) => write("expandedFolderIds", ids),
 
+  // Read by the inline script in index.html too ("sidebarWidth", "outlineWidth").
+  getPanelWidth: (panel: "sidebar" | "outline") =>
+    read<number | null>(`${panel}Width`, null),
+  setPanelWidth: (panel: "sidebar" | "outline", width: number | null) =>
+    write(`${panel}Width`, width),
+
   getOutlineOpen: () => read<boolean>("outlineOpen", true),
   setOutlineOpen: (open: boolean) => write("outlineOpen", open),
 

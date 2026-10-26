@@ -45,3 +45,10 @@ a {
   outline: 2px solid var(--focus-ring);
   outline-offset: 1px;
 }
+
+/* Set while a panel is being resized (Shared/Ui/ResizeHandle). */
+:root[data-resizing] * {
+  cursor: col-resize !important;
+  user-select: none;
+  transition: none !important;
+}
