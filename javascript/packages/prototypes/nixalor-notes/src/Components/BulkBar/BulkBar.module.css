@@ -1,0 +1,44 @@
+.bulk-bar {
+  position: absolute;
+  bottom: 28px;
+  left: 50%;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px;
+  border-radius: var(--radius-lg);
+  background: var(--text);
+  box-shadow: var(--shadow-popover);
+  color: var(--bg);
+  transform: translateX(-50%);
+  animation: rise 0.15s ease;
+}
+
+.count {
+  padding: 0 10px 0 8px;
+  font-size: 14px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* Buttons sit on an inverted surface. */
+.bulk-bar [data-variant="ghost"] {
+  background: color-mix(in srgb, var(--bg) 10%, var(--text));
+  color: var(--bg);
+}
+
+.bulk-bar [data-variant="ghost"]:hover {
+  background: color-mix(in srgb, var(--bg) 18%, var(--text));
+}
+
+.bulk-bar button[aria-label] {
+  color: var(--bg);
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(8px);
+  }
+}

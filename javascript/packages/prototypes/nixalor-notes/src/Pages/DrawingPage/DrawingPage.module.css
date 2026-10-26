@@ -1,0 +1,19 @@
+.drawing-page {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: text;
+}
+
+.canvas {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  background: var(--bg-canvas);
+}

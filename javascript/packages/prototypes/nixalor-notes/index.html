@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg" href="/favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&display=swap">
+    <title>Nixalor - Notes</title>
+    <script>
+      // Apply stored appearance before first paint to avoid a light/dark or accent flash.
+      (function () {
+        var settings = {};
+        try {
+          settings = JSON.parse(localStorage.getItem("nixalor-notes:settings") || "{}") || {};
+        } catch (e) {}
+        var mode = settings.themeMode || "dark";
+        var dark =
+          mode === "dark" ||
+          (mode === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches);
+        var root = document.documentElement;
+        root.dataset.theme = dark ? "dark" : "light";
+        root.dataset.accent = settings.accent || "yellow";
+        root.dataset.density = settings.compact ? "compact" : "comfortable";
+        if (settings.language) {
+          root.lang = settings.language;
+        }
+      })();
+    </script>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="module" src="/src/index.tsx"></script>
+</body>
+</html>

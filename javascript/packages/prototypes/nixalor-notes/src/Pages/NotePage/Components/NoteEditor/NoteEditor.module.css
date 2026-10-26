@@ -1,0 +1,8 @@
+.note-editor {
+  position: absolute;
+  inset: 0;
+}
+
+.note-editor :global(.cm-editor) {
+  height: 100%;
+}

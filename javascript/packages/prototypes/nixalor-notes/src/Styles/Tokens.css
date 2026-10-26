@@ -1,0 +1,118 @@
+/* Dark is the primary theme (matches the design); light mirrors it on a warm white. */
+:root,
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --font-ui: "Inter Tight", system-ui, -apple-system, "Segoe UI", roboto, sans-serif;
+  --bg: #0e0f12;
+  --bg-canvas: #121316;
+  --surface-1: #15161a;
+  --surface-2: #1a1c21;
+  --surface-3: #23252b;
+  --surface-raised: #17191e;
+  --surface-hover: #1c1e24;
+  --surface-selected: #262a33;
+  --border: #22242a;
+  --border-strong: #2e3138;
+  --border-dialog: #33363e;
+  --border-input: #2a2d34;
+  --text: #ecedf0;
+  --text-secondary: #c9ccd3;
+  --text-muted: #a3a7b1;
+  --text-faint: #6b6f7a;
+  --on-accent: #0e0f12;
+  --success: #4ade80;
+  --danger: #f87171;
+  --danger-strong: #b91c1c;
+  --overlay: rgb(5 6 8 / 0.62);
+  --shadow-dialog: 0 30px 80px rgb(0 0 0 / 0.6);
+  --shadow-popover: 0 12px 32px rgb(0 0 0 / 0.5);
+  --thumb-filter: invert(93%) hue-rotate(180deg);
+  --code-keyword: #c792ea;
+  --code-string: #a5d6a7;
+  --code-number: #f8b26a;
+  --code-function: #82aaff;
+  --code-property: #89ddff;
+  --code-block-bg: rgb(255 255 255 / 0.05);
+  --accent-soft-bg: color-mix(in srgb, var(--accent) 12%, var(--bg));
+  --accent-soft-text: color-mix(in srgb, var(--accent) 45%, #fff);
+  --focus-ring: color-mix(in srgb, var(--accent) 55%, transparent);
+  --radius-xs: 6px;
+  --radius-sm: 8px;
+  --radius-md: 10px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --sidebar-width: 272px;
+  --outline-width: 260px;
+  --topbar-height: 56px;
+  --row-height: 34px;
+  --row-height-sm: 32px;
+  --nav-height: 36px;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+
+  --bg: #fbfbfa;
+  --bg-canvas: #fff;
+  --surface-1: #f3f3f1;
+  --surface-2: #eeeeeb;
+  --surface-3: #e6e6e2;
+  --surface-raised: #fff;
+  --surface-hover: #f0f0ec;
+  --surface-selected: #e9e9e4;
+  --border: #e6e6e1;
+  --border-strong: #d9d9d3;
+  --border-dialog: #dcdcd6;
+  --border-input: #dededa;
+  --text: #16171a;
+  --text-secondary: #3a3d44;
+  --text-muted: #6b6f7a;
+  --text-faint: #a3a7b1;
+  --danger: #dc2626;
+  --danger-strong: #b91c1c;
+  --overlay: rgb(20 20 24 / 0.35);
+  --shadow-dialog: 0 30px 80px rgb(0 0 0 / 0.18);
+  --shadow-popover: 0 12px 32px rgb(0 0 0 / 0.14);
+  --thumb-filter: none;
+  --code-keyword: #8e44ad;
+  --code-string: #2e7d32;
+  --code-number: #c2410c;
+  --code-function: #1d4ed8;
+  --code-property: #0e7490;
+  --code-block-bg: rgb(0 0 0 / 0.045);
+  --accent-soft-bg: color-mix(in srgb, var(--accent) 22%, #fff);
+  --accent-soft-text: color-mix(in srgb, var(--accent) 40%, #000);
+}
+
+/* Accent palette — selected in Settings → Appearance. */
+:root,
+:root[data-accent="yellow"] {
+  --accent: #facc15;
+}
+
+:root[data-accent="lime"] {
+  --accent: #a3e635;
+}
+
+:root[data-accent="teal"] {
+  --accent: #5eead4;
+}
+
+:root[data-accent="pink"] {
+  --accent: #fda4af;
+}
+
+:root[data-accent="blue"] {
+  --accent: #3b82f6;
+}
+
+:root[data-accent="purple"] {
+  --accent: #8b5cf6;
+}
+
+:root[data-density="compact"] {
+  --row-height: 28px;
+  --row-height-sm: 26px;
+  --nav-height: 30px;
+}

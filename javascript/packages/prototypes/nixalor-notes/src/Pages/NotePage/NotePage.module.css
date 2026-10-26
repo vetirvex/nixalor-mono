@@ -1,0 +1,34 @@
+.note-page {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: text;
+}
+
+.body {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  background: var(--bg-canvas);
+}
+
+.main {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+}
+
+.layer {
+  position: absolute;
+  inset: 0;
+}
+
+.layer[hidden] {
+  display: none;
+}

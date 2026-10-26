@@ -1,0 +1,50 @@
+/*
+ * Thin, rounded scrollbars everywhere (app, dialogs, CodeMirror, Excalidraw).
+ * The thumb is drawn with a transparent border + padding-box background so it
+ * floats inside the track instead of touching the edges.
+ */
+:root {
+  --scrollbar-size: 10px;
+  --scrollbar-thumb: color-mix(in srgb, var(--text) 18%, transparent);
+  --scrollbar-thumb-hover: color-mix(in srgb, var(--text) 34%, transparent);
+}
+
+::-webkit-scrollbar {
+  width: var(--scrollbar-size);
+  height: var(--scrollbar-size);
+  background: transparent;
+}
+
+::-webkit-scrollbar-track,
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  min-height: 32px;
+  border: 3px solid transparent;
+  border-radius: var(--scrollbar-size);
+  background: var(--scrollbar-thumb) padding-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  border-width: 2px;
+  background-color: var(--scrollbar-thumb-hover);
+}
+
+::-webkit-scrollbar-button {
+  display: none;
+}
+
+/* Firefox has no ::-webkit-scrollbar; the standard properties get close enough. */
+@supports not selector(::-webkit-scrollbar) {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbar-thumb) transparent;
+  }
+}
+
+/* Excalidraw sizes its own scrollbars (4px); the inset border would hide the thumb. */
+.excalidraw ::-webkit-scrollbar-thumb {
+  border: 0;
+}

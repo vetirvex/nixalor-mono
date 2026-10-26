@@ -1,0 +1,11 @@
+.name-input {
+  flex: 1;
+  min-width: 0;
+  height: 24px;
+  padding: 0 6px;
+  border: 1.5px solid var(--accent);
+  border-radius: var(--radius-xs);
+  outline: none;
+  background: var(--bg);
+  color: var(--text);
+}

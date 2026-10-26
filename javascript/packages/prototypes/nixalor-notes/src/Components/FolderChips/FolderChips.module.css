@@ -1,0 +1,50 @@
+.folder-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.chip,
+.create {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 50px;
+  padding: 0 16px;
+  border-radius: var(--radius-lg);
+  font-size: 14px;
+}
+
+.chip {
+  max-width: 280px;
+  border: 1px solid var(--border-strong);
+  background: var(--surface-1);
+  font-weight: 700;
+}
+
+.chip:hover {
+  border-color: var(--text-faint);
+}
+
+.name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.count {
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.create {
+  border: 1.5px dashed var(--border-strong);
+  background: transparent;
+  color: var(--text-muted);
+}
+
+.create:hover {
+  border-color: var(--text-faint);
+  color: var(--text);
+}

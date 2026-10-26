@@ -1,0 +1,35 @@
+.checkbox {
+  position: relative;
+  display: inline-flex;
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+}
+
+.checkbox input {
+  width: 100%;
+  height: 100%;
+  border: 1.5px solid var(--border-strong);
+  border-radius: 5px;
+  background: transparent;
+  cursor: pointer;
+  appearance: none;
+}
+
+.checkbox input:checked {
+  border-color: var(--accent);
+  background: var(--accent);
+}
+
+.mark {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  color: var(--on-accent);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.checkbox input:checked + .mark {
+  opacity: 1;
+}

@@ -1,0 +1,36 @@
+.note-thumbnail {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: var(--surface-2);
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  align-self: stretch;
+  width: 100%;
+  padding: 10px 12px;
+  overflow: hidden;
+  color: var(--text-secondary);
+  font-size: 10px;
+  line-height: 1.45;
+  text-align: left;
+}
+
+.line {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.line:first-child {
+  color: var(--text);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.placeholder {
+  color: var(--text-faint);
+}

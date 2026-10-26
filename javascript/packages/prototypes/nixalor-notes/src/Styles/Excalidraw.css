@@ -1,0 +1,34 @@
+/* Re-skin Excalidraw's own UI with the app's tokens so the editor matches the shell. */
+
+/* stylelint-disable selector-class-pattern -- Excalidraw's own class names */
+.excalidraw,
+.excalidraw.theme--dark {
+  --ui-font: var(--font-ui);
+  --color-primary: var(--accent);
+  --color-primary-darker: color-mix(in srgb, var(--accent) 85%, #000);
+  --color-primary-darkest: color-mix(in srgb, var(--accent) 70%, #000);
+  --color-primary-hover: color-mix(in srgb, var(--accent) 88%, #000);
+  --color-primary-light: var(--accent-soft-bg);
+  --color-primary-light-darker: color-mix(in srgb, var(--accent) 20%, var(--bg));
+  --color-surface-primary-container: var(--accent-soft-bg);
+  --color-on-primary-container: var(--accent-soft-text);
+  --color-brand-active: var(--accent);
+  --island-bg-color: var(--surface-raised);
+  --popup-bg-color: var(--surface-raised);
+  --sidebar-bg-color: var(--surface-raised);
+  --border-radius-lg: var(--radius-md);
+}
+
+.excalidraw.theme--dark {
+  --default-bg-color: var(--bg-canvas);
+  --input-bg-color: var(--bg);
+  --color-surface-low: var(--surface-2);
+  --color-surface-high: var(--surface-selected);
+  --color-on-surface: var(--text);
+}
+
+/* Primary buttons in Excalidraw dialogs: accent background needs dark text. */
+.excalidraw .ExcButton--color-primary.ExcButton--variant-filled,
+.excalidraw .Dialog .confirm-dialog-buttons .ExcButton--color-primary {
+  color: var(--on-accent);
+}

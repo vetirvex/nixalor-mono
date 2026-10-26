@@ -1,0 +1,47 @@
+.icon-button {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-muted);
+}
+
+.icon-button[data-size="sm"] {
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
+}
+
+.icon-button[data-size="xs"] {
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-xs);
+}
+
+.icon-button[data-variant="filled"] {
+  background: var(--surface-2);
+  color: var(--text);
+}
+
+/* Matches the 38px secondary buttons it sits next to in top bars. */
+.icon-button[data-variant="outlined"] {
+  width: 38px;
+  height: 38px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  color: var(--text);
+}
+
+.icon-button:hover {
+  background: var(--surface-3);
+  color: var(--text);
+}
+
+.icon-button[data-active="true"] {
+  color: var(--accent);
+}

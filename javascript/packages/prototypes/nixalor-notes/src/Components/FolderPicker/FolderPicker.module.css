@@ -1,0 +1,48 @@
+.folder-picker {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  max-height: 240px;
+  padding: 6px;
+  overflow: auto;
+  border: 1px solid var(--border-input);
+  border-radius: var(--radius-lg);
+}
+
+.option {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 8px;
+  min-height: 36px;
+  padding: 0 10px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 500;
+  text-align: left;
+}
+
+.option:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.option:not(:disabled):hover {
+  background: var(--surface-hover);
+}
+
+.option[aria-checked="true"] {
+  background: var(--accent-soft-bg);
+  color: var(--accent-soft-text);
+  font-weight: 700;
+}
+
+.name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

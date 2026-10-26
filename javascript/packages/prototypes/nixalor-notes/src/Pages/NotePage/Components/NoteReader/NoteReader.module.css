@@ -1,0 +1,203 @@
+.note-reader {
+  position: absolute;
+  inset: 0;
+  overflow: auto;
+}
+
+.content,
+.empty {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 40px 32px 30vh;
+  font-size: 16px;
+  line-height: 1.7;
+}
+
+.empty {
+  color: var(--text-muted);
+}
+
+.content > :first-child {
+  margin-top: 0;
+}
+
+.content h1,
+.content h2,
+.content h3,
+.content h4,
+.content h5,
+.content h6 {
+  position: relative;
+  margin: 1.1em 0 0.4em;
+  font-weight: 800;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+}
+
+.content h1 {
+  font-size: 2em;
+}
+
+.content h2 {
+  font-size: 1.6em;
+}
+
+.content h3 {
+  font-size: 1.35em;
+}
+
+.content h4 {
+  font-size: 1.15em;
+}
+
+.content p,
+.content ul,
+.content ol,
+.content blockquote,
+.content pre,
+.content table {
+  margin: 0 0 0.8em;
+}
+
+.content ul,
+.content ol {
+  padding-left: 1.5em;
+}
+
+.content li:has(> input[type="checkbox"]) {
+  margin-left: -1.3em;
+  list-style: none;
+}
+
+.content input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  margin-right: 8px;
+  vertical-align: -2px;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+.content li:has(> input[type="checkbox"]:checked) {
+  color: var(--text-muted);
+  text-decoration: line-through;
+}
+
+.content a {
+  color: var(--accent-soft-text);
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--accent) 45%, transparent);
+  text-underline-offset: 3px;
+}
+
+.content a:global(.wikilink-missing) {
+  opacity: 0.6;
+  text-decoration-style: dashed;
+}
+
+.content blockquote {
+  padding-left: 14px;
+  border-left: 3px solid var(--accent);
+  color: var(--text-secondary);
+}
+
+.content code {
+  padding: 1px 4px;
+  border-radius: 4px;
+  background: var(--surface-3);
+  font-family: ui-monospace, "SF Mono", menlo, consolas, monospace;
+  font-size: 0.88em;
+}
+
+.content pre {
+  padding: 12px 14px;
+  overflow: auto;
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+}
+
+.content pre code {
+  padding: 0;
+  background: none;
+}
+
+.content hr {
+  margin: 1.5em 0;
+  border: none;
+  border-top: 1px solid var(--border-strong);
+}
+
+.content table {
+  border-collapse: collapse;
+}
+
+.content th,
+.content td {
+  padding: 6px 12px;
+  border: 1px solid var(--border-strong);
+}
+
+.content img {
+  display: block;
+  max-width: 100%;
+  max-height: 70vh;
+  margin: 6px auto;
+  border-radius: var(--radius-sm);
+  object-fit: contain;
+}
+
+/* Alignment within the image's own line — text never wraps around it. */
+.content img[data-align="left"] {
+  margin-left: 0;
+}
+
+.content img[data-align="right"] {
+  margin-right: 0;
+}
+
+/* Heading folding — mirrors the arrows in the editor. */
+.content :global(.fold-toggle) {
+  position: absolute;
+  top: 50%;
+  left: -26px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  color: var(--text-muted);
+  opacity: 0;
+  cursor: pointer;
+  transform: translateY(-50%);
+  transition:
+    opacity 0.12s ease,
+    transform 0.12s ease;
+}
+
+.content :is(h1, h2, h3, h4, h5, h6):hover :global(.fold-toggle),
+.content [data-folded="true"] :global(.fold-toggle) {
+  opacity: 1;
+}
+
+.content [data-folded="true"] :global(.fold-toggle) {
+  transform: translateY(-50%) rotate(-90deg);
+}
+
+.content :global(.fold-toggle):hover {
+  color: var(--text);
+}
+
+.content [data-folded="true"]::after {
+  content: "…";
+  display: inline-block;
+  margin-left: 8px;
+  padding: 0 8px;
+  border: 1px solid var(--border-strong);
+  border-radius: 6px;
+  background: var(--surface-2);
+  color: var(--text-muted);
+  font-size: 0.5em;
+  font-weight: 500;
+  line-height: 1.6;
+  vertical-align: middle;
+}

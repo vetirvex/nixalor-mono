@@ -1,0 +1,84 @@
+/* Same open/close animation as the left sidebar: the width collapses to 0. */
+.note-outline {
+  flex-shrink: 0;
+  width: var(--outline-width);
+  overflow: hidden;
+  border-left: 1px solid var(--border);
+  background: var(--bg);
+  transition: width 0.2s ease;
+}
+
+.note-outline[data-open="false"] {
+  width: 0;
+  border-left-width: 0;
+}
+
+/* Fixed width so the content slides out instead of reflowing while collapsing. */
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: calc(var(--outline-width) - 1px);
+  height: 100%;
+  padding: 20px 10px;
+  overflow-y: auto;
+}
+
+.title {
+  padding: 0 10px 4px;
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.empty {
+  padding: 0 10px;
+  color: var(--text-faint);
+  font-size: 13px;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.item {
+  min-height: var(--row-height-sm);
+  padding-right: 10px;
+  overflow: hidden;
+  border: none;
+  border-left: 2px solid transparent;
+  border-radius: 0 var(--radius-xs) var(--radius-xs) 0;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 13px;
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.item[data-level="1"] {
+  color: var(--text);
+  font-weight: 700;
+}
+
+.item:hover {
+  background: var(--surface-hover);
+  color: var(--text);
+}
+
+.item[aria-current="location"] {
+  border-left-color: var(--accent);
+  color: var(--accent-soft-text);
+  font-weight: 600;
+}
+
+/* Not enough room next to a 760px text column. */
+@media (max-width: 1100px) {
+  .note-outline {
+    display: none;
+  }
+}

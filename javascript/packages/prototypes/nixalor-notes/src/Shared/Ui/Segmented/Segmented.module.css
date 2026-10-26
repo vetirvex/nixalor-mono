@@ -1,0 +1,49 @@
+.segmented {
+  display: inline-flex;
+  gap: 4px;
+  padding: 4px;
+  border-radius: var(--radius-lg);
+  background: var(--surface-1);
+}
+
+.segmented[data-variant="fill"] {
+  display: grid;
+  grid-auto-columns: 1fr;
+  grid-auto-flow: column;
+  width: 100%;
+}
+
+.option {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 32px;
+  padding: 0 12px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.option:hover {
+  color: var(--text);
+}
+
+.segmented[data-variant="tabs"] .option {
+  min-height: 38px;
+  padding: 0 18px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.segmented[data-variant="fill"] .option {
+  min-height: 40px;
+}
+
+.option[aria-checked="true"] {
+  background: var(--text);
+  color: var(--bg);
+}

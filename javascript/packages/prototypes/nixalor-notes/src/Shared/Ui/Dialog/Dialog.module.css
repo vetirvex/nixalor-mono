@@ -1,0 +1,55 @@
+.layer {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: var(--overlay);
+  animation: fade-in 0.12s ease;
+}
+
+.panel {
+  position: absolute;
+  left: 50%;
+  display: flex;
+  flex-direction: column;
+  max-width: calc(100% - 32px);
+  max-height: calc(100% - 48px);
+  border: 1px solid var(--border-dialog);
+  border-radius: 18px;
+  background: var(--surface-raised);
+  box-shadow: var(--shadow-dialog);
+  color: var(--text);
+  outline: none;
+  transform: translateX(-50%);
+  animation: pop-in 0.14s ease;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 20px 0;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(6px) scale(0.99);
+  }
+}
