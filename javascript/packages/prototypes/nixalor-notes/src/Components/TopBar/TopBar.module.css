@@ -25,3 +25,16 @@
   align-items: center;
   gap: 8px;
 }
+
+@media (max-width: 720px) {
+  .top-bar {
+    gap: 6px;
+    min-height: calc(var(--topbar-height) + env(safe-area-inset-top));
+    padding: env(safe-area-inset-top) 10px 0;
+  }
+
+  .left,
+  .right {
+    gap: 4px;
+  }
+}

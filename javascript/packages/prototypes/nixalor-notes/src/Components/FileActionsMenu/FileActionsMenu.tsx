@@ -11,6 +11,8 @@ import {
   MoveIcon,
   PencilIcon,
   SmileIcon,
+  StarFilledIcon,
+  StarIcon,
   TrashIcon,
 } from "../../Shared/Icons/Icons";
 import { getFileKind } from "../../Shared/Storage/StorageTypes";
@@ -26,8 +28,9 @@ import type { FileActionsMenuProps } from "./FileActionsMenuTypes";
 const FileActionsMenu = memo<FileActionsMenuProps>(
   ({ file, onRename, onExportImage, onExportPdf }) => {
     const { t } = useI18n();
-    const { downloadDrawing, duplicateDrawing } = useNotes();
-    const { openMove, openIconPicker } = useLayout();
+    const { downloadDrawing, duplicateDrawing, toggleFavorite } = useNotes();
+    const { isMobile, openMove, openIconPicker } = useLayout();
+    const isFavorite = Boolean(file.favoritedAt);
     const importFile = useImportFile();
     const confirmDelete = useConfirmDelete();
     const menu = useMenu();
@@ -46,6 +49,21 @@ const FileActionsMenu = memo<FileActionsMenuProps>(
         </IconButton>
         {menu.anchor && (
           <Menu anchor={menu.anchor} onClose={menu.close} align="end" minWidth={230}>
+            {/* Phones have no room for the star in the top bar. */}
+            {isMobile && (
+              <>
+                <MenuItem
+                  icon={isFavorite ? <StarFilledIcon /> : <StarIcon />}
+                  label={
+                    isFavorite
+                      ? t("common.removeFromFavorites")
+                      : t("common.addToFavorites")
+                  }
+                  onSelect={() => void toggleFavorite(item)}
+                />
+                <MenuSeparator />
+              </>
+            )}
             {onExportImage && (
               <MenuItem
                 icon={<DownloadIcon />}

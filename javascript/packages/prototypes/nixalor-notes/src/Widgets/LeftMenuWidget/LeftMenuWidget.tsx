@@ -1,11 +1,13 @@
-import { memo, useCallback, useMemo, useState } from "react";
+import { memo, useCallback, useMemo, useRef, useState } from "react";
 import type { DragEvent } from "react";
 import { AppLogo } from "../../Components/AppLogo/AppLogo";
 import { useLayout } from "../../Providers/LayoutProvider/LayoutContext";
 import { useNotes } from "../../Providers/NotesProvider/NotesContext";
+import { useSwipeDismiss } from "../../Shared/Hooks/useSwipeDismiss";
 import { useI18n } from "../../Shared/I18n/I18nContext";
 import { PlusIcon, SearchIcon, SettingsIcon } from "../../Shared/Icons/Icons";
 import type { Drawing, Folder } from "../../Shared/Storage/StorageTypes";
+import { Button } from "../../Shared/Ui/Button/Button";
 import { IconButton } from "../../Shared/Ui/IconButton/IconButton";
 import { Kbd } from "../../Shared/Ui/Kbd/Kbd";
 import { ResizeHandle } from "../../Shared/Ui/ResizeHandle/ResizeHandle";
@@ -40,8 +42,30 @@ const groupBy = <T extends { name: string }>(
 
 const LeftMenuWidget = memo<LeftMenuWidgetProps>(() => {
   const { t } = useI18n();
-  const { isLoaded, folders, drawings } = useNotes();
-  const { isSidebarOpen, openPalette, openCreate, openSettings } = useLayout();
+  const { isLoaded, folders, drawings, route } = useNotes();
+  const {
+    isMobile,
+    isSidebarOpen,
+    setSidebarOpen,
+    openPalette,
+    openCreate,
+    openSettings,
+  } = useLayout();
+  const asideRef = useRef<HTMLElement>(null);
+  // Create next to what is open: inside the current folder or the open file's folder.
+  const createFolderId =
+    route.type === "folder"
+      ? route.id
+      : route.type === "drawing"
+        ? (drawings.find((d) => d.id === route.id)?.folderId ?? null)
+        : null;
+  const closeDrawer = useCallback(() => setSidebarOpen(false), [setSidebarOpen]);
+  useSwipeDismiss({
+    ref: asideRef,
+    direction: "left",
+    enabled: isMobile && isSidebarOpen,
+    onDismiss: closeDrawer,
+  });
   const [editingId, setEditingId] = useState<string | null>(null);
   const dnd = useTreeDndState();
 
@@ -85,88 +109,112 @@ const LeftMenuWidget = memo<LeftMenuWidgetProps>(() => {
   const isEmpty = rootFolders.length === 0 && rootDrawings.length === 0;
 
   return (
-    <aside
-      className={classes.leftMenuContainer}
-      data-open={isSidebarOpen}
-      aria-hidden={!isSidebarOpen}
-      inert={!isSidebarOpen}
-    >
-      <ResizeHandle panel="sidebar" edge="right" label={t("panel.resize")} />
-      <TreeDndContext.Provider value={dnd}>
-        <nav className={classes.panel} aria-label={t("nav.workspace")}>
-          <div className={classes.workspace}>
-            <AppLogo size={30} className={classes.logo} />
-            <span className={classes.workspaceText}>
-              <span className={classes.workspaceName}>{t("app.name")}</span>
-              <span className={classes.workspaceMeta}>
-                {t("count.files", { count: drawings.length })}
+    <>
+      {isMobile && (
+        <div
+          className={classes.backdrop}
+          data-open={isSidebarOpen}
+          onClick={closeDrawer}
+        />
+      )}
+      <aside
+        ref={asideRef}
+        className={classes.leftMenuContainer}
+        data-open={isSidebarOpen}
+        aria-hidden={!isSidebarOpen}
+        inert={!isSidebarOpen}
+      >
+        {!isMobile && (
+          <ResizeHandle panel="sidebar" edge="right" label={t("panel.resize")} />
+        )}
+        <TreeDndContext.Provider value={dnd}>
+          <nav className={classes.panel} aria-label={t("nav.workspace")}>
+            <div className={classes.workspace}>
+              <AppLogo size={30} className={classes.logo} />
+              <span className={classes.workspaceText}>
+                <span className={classes.workspaceName}>{t("app.name")}</span>
+                <span className={classes.workspaceMeta}>
+                  {t("count.files", { count: drawings.length })}
+                </span>
               </span>
-            </span>
-          </div>
-
-          <button type="button" className={classes.search} onClick={openPalette}>
-            <SearchIcon size={15} />
-            <span className={classes.searchLabel}>{t("nav.search")}</span>
-            <Kbd>{MOD_KEY}K</Kbd>
-          </button>
-
-          <FavoritesSection />
-
-          <section
-            className={classes.folders}
-            aria-label={t("nav.folders")}
-            data-drop-target={dnd.dropTarget?.folderId === null}
-            onDragOver={handleTreeDragOver}
-            onDragLeave={handleTreeDragLeave}
-            onDrop={handleTreeDrop}
-          >
-            <div className={classes.sectionHeader}>
-              <span className={classes.sectionTitle}>{t("nav.folders")}</span>
-              <IconButton
-                label={t("nav.newFolder")}
-                size="sm"
-                onClick={() => openCreate("folder", null)}
-              >
-                <PlusIcon size={16} />
-              </IconButton>
+              {/* Phones have no room for "Create" in the top bar. */}
+              {isMobile && (
+                <Button
+                  variant="primary"
+                  icon={<PlusIcon size={15} strokeWidth={2.5} />}
+                  onClick={() => openCreate("note", createFolderId)}
+                >
+                  {t("common.create")}
+                </Button>
+              )}
             </div>
-            {isLoaded && isEmpty && <p className={classes.empty}>{t("nav.emptyTree")}</p>}
-            <ul role="tree" className={classes.treeList}>
-              {rootFolders.map((folder) => (
-                <FolderRow
-                  key={folder.id}
-                  folder={folder}
-                  depth={0}
-                  tree={tree}
-                  editingId={editingId}
-                  onStartEditing={setEditingId}
-                  onStopEditing={stopEditing}
-                />
-              ))}
-              {rootDrawings.map((drawing) => (
-                <DrawingRow
-                  key={drawing.id}
-                  drawing={drawing}
-                  depth={0}
-                  editingId={editingId}
-                  onStartEditing={setEditingId}
-                  onStopEditing={stopEditing}
-                />
-              ))}
-            </ul>
-          </section>
 
-          <div className={classes.footer}>
-            <NavItem
-              icon={<SettingsIcon />}
-              label={t("nav.settings")}
-              onClick={openSettings}
-            />
-            <p className={classes.storage}>{t("app.storage")}</p>
-          </div>
-        </nav>
-      </TreeDndContext.Provider>
-    </aside>
+            <button type="button" className={classes.search} onClick={openPalette}>
+              <SearchIcon size={15} />
+              <span className={classes.searchLabel}>{t("nav.search")}</span>
+              <Kbd>{MOD_KEY}K</Kbd>
+            </button>
+
+            <FavoritesSection />
+
+            <section
+              className={classes.folders}
+              aria-label={t("nav.folders")}
+              data-drop-target={dnd.dropTarget?.folderId === null}
+              onDragOver={handleTreeDragOver}
+              onDragLeave={handleTreeDragLeave}
+              onDrop={handleTreeDrop}
+            >
+              <div className={classes.sectionHeader}>
+                <span className={classes.sectionTitle}>{t("nav.folders")}</span>
+                <IconButton
+                  label={t("nav.newFolder")}
+                  size="sm"
+                  onClick={() => openCreate("folder", null)}
+                >
+                  <PlusIcon size={16} />
+                </IconButton>
+              </div>
+              {isLoaded && isEmpty && (
+                <p className={classes.empty}>{t("nav.emptyTree")}</p>
+              )}
+              <ul role="tree" className={classes.treeList}>
+                {rootFolders.map((folder) => (
+                  <FolderRow
+                    key={folder.id}
+                    folder={folder}
+                    depth={0}
+                    tree={tree}
+                    editingId={editingId}
+                    onStartEditing={setEditingId}
+                    onStopEditing={stopEditing}
+                  />
+                ))}
+                {rootDrawings.map((drawing) => (
+                  <DrawingRow
+                    key={drawing.id}
+                    drawing={drawing}
+                    depth={0}
+                    editingId={editingId}
+                    onStartEditing={setEditingId}
+                    onStopEditing={stopEditing}
+                  />
+                ))}
+              </ul>
+            </section>
+
+            <div className={classes.footer}>
+              <NavItem
+                icon={<SettingsIcon />}
+                label={t("nav.settings")}
+                onClick={openSettings}
+              />
+              <p className={classes.storage}>{t("app.storage")}</p>
+            </div>
+          </nav>
+        </TreeDndContext.Provider>
+      </aside>
+    </>
   );
 });
 LeftMenuWidget.displayName = "LeftMenuWidget";

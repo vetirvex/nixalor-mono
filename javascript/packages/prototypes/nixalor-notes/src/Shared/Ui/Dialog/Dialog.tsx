@@ -1,5 +1,7 @@
-import { memo, useEffect, useRef } from "react";
+import { memo, useCallback, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
+import { MOBILE_QUERY, useMediaQuery } from "../../Hooks/useMediaQuery";
+import { useSwipeDismiss } from "../../Hooks/useSwipeDismiss";
 import { useI18n } from "../../I18n/I18nContext";
 import { CloseIcon } from "../../Icons/Icons";
 import { IconButton } from "../IconButton/IconButton";
@@ -16,12 +18,21 @@ const Dialog = memo<DialogProps>(
     ariaLabelledBy,
     width = 620,
     top = 96,
+    mobileHeight = "auto",
     className,
     children,
   }) => {
     const panelRef = useRef<HTMLDivElement>(null);
     const onCloseRef = useRef(onClose);
     onCloseRef.current = onClose;
+    const isMobile = useMediaQuery(MOBILE_QUERY);
+    const close = useCallback(() => onCloseRef.current(), []);
+    useSwipeDismiss({
+      ref: panelRef,
+      direction: "down",
+      enabled: isMobile,
+      onDismiss: close,
+    });
 
     useEffect(() => {
       const previouslyFocused = document.activeElement as HTMLElement | null;
@@ -72,7 +83,9 @@ const Dialog = memo<DialogProps>(
           aria-labelledby={ariaLabelledBy}
           tabIndex={-1}
           className={[classes.panel, className].filter(Boolean).join(" ")}
-          style={{ width, top }}
+          data-mobile-height={mobileHeight}
+          // Phones lay the sheet out in CSS instead.
+          style={isMobile ? undefined : { width, top }}
         >
           {children}
         </div>

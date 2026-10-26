@@ -15,6 +15,8 @@ type DialogState =
   | null;
 
 interface LayoutContextValue {
+  /** Phone layout: drawer sidebar, bottom tab bar, sheet dialogs. */
+  isMobile: boolean;
   isSidebarOpen: boolean;
   setSidebarOpen: (open: boolean) => void;
   toggleSidebar: () => void;

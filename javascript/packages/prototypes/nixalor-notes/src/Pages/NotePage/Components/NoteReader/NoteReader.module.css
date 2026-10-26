@@ -6,9 +6,9 @@
 
 .content,
 .empty {
-  max-width: 824px;
+  max-width: calc(760px + 2 * var(--note-gutter));
   margin: 0 auto;
-  padding: 40px 32px 30vh;
+  padding: var(--note-top-space) var(--note-gutter) 30vh;
   font-size: 16px;
   line-height: 1.7;
 }
@@ -18,9 +18,9 @@
 }
 
 .header {
-  max-width: 824px;
+  max-width: calc(760px + 2 * var(--note-gutter));
   margin: 0 auto;
-  padding: 40px 32px 0;
+  padding: var(--note-top-space) var(--note-gutter) 0;
   font-size: 16px;
 }
 

@@ -32,3 +32,11 @@
   min-width: 0;
   font-weight: 700;
 }
+
+/* Phones: only the current item fits; folders stay reachable from the drawer. */
+@media (max-width: 720px) {
+  .link,
+  .separator {
+    display: none;
+  }
+}

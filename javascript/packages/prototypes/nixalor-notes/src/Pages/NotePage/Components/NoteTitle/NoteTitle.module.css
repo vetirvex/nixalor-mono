@@ -17,3 +17,9 @@
 .note-title::placeholder {
   color: var(--text-faint);
 }
+
+@media (max-width: 720px) {
+  .note-title {
+    font-size: 1.75em;
+  }
+}

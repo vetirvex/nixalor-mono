@@ -9,6 +9,11 @@ interface DialogProps {
   width?: number;
   /** Distance from the top of the viewport in px. */
   top?: number;
+  /**
+   * Phones show dialogs as bottom sheets: "auto" fits the content, "tall" takes
+   * nearly the whole screen (keeps a focused field above the on-screen keyboard).
+   */
+  mobileHeight?: "auto" | "tall";
   className?: string;
   children: ReactNode;
 }

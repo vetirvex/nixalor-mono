@@ -53,3 +53,45 @@
     transform: translateX(-50%) translateY(6px) scale(0.99);
   }
 }
+
+/* Phones: a bottom sheet with a grab handle; swipe down or tap above to close. */
+@media (max-width: 720px) {
+  .panel {
+    inset: auto 0 0;
+    width: auto;
+    max-width: none;
+    max-height: calc(100dvh - env(safe-area-inset-top) - 24px);
+    padding-top: 10px;
+    padding-bottom: env(safe-area-inset-bottom);
+    border-width: 1px 0 0;
+    border-radius: 22px 22px 0 0;
+    transform: none;
+    animation: sheet-in 0.26s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  .panel[data-mobile-height="tall"] {
+    height: calc(100dvh - env(safe-area-inset-top) - 24px);
+  }
+
+  .panel::before {
+    position: absolute;
+    top: 7px;
+    left: 50%;
+    width: 38px;
+    height: 5px;
+    border-radius: 3px;
+    background: var(--border-strong);
+    transform: translateX(-50%);
+    content: "";
+  }
+
+  .header {
+    padding: 14px 16px 0;
+  }
+}
+
+@keyframes sheet-in {
+  from {
+    transform: translateY(100%);
+  }
+}

@@ -130,7 +130,13 @@ const CreateDialogWidget = memo<CreateDialogWidgetProps>(
     };
 
     return (
-      <Dialog onClose={onClose} ariaLabelledBy={titleId} width={720} top={70}>
+      <Dialog
+        onClose={onClose}
+        ariaLabelledBy={titleId}
+        width={720}
+        top={70}
+        mobileHeight="tall"
+      >
         <form className={classes.form} onSubmit={handleSubmit} onKeyDown={handleKeyDown}>
           <DialogHeader title={t("create.title")} titleId={titleId} onClose={onClose} />
           <div className={classes.tabs}>

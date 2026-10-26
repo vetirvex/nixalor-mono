@@ -47,7 +47,13 @@ const MoveDialogWidget = memo<MoveDialogWidgetProps>(({ items, onClose }) => {
   };
 
   return (
-    <Dialog onClose={onClose} ariaLabelledBy={titleId} width={460} top={110}>
+    <Dialog
+      onClose={onClose}
+      ariaLabelledBy={titleId}
+      width={460}
+      top={110}
+      mobileHeight="tall"
+    >
       <DialogHeader title={t("move.title")} titleId={titleId} onClose={onClose} />
       <div className={classes.body}>
         <FolderPicker

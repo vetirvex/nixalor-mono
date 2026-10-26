@@ -137,3 +137,58 @@
   color: var(--text-faint);
   font-size: 12px;
 }
+
+.backdrop {
+  display: none;
+}
+
+/* Phones: the sidebar slides over the page as a drawer. */
+@media (max-width: 720px) {
+  .left-menu-container,
+  .left-menu-container[data-open="false"] {
+    --sidebar-width: min(86vw, 340px);
+
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 80;
+    width: var(--sidebar-width);
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+    border-right-width: 1px;
+    border-radius: 0 20px 20px 0;
+    box-shadow: var(--shadow-dialog);
+    transition: transform 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  .left-menu-container[data-open="false"] {
+    box-shadow: none;
+    transform: translateX(-105%);
+  }
+
+  .backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 79;
+    display: block;
+    background: var(--overlay);
+    transition: opacity 0.28s ease;
+  }
+
+  .backdrop[data-open="false"] {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .panel {
+    padding: 14px 12px;
+  }
+}
+
+/* No keyboard on touch screens — the ⌘K hint is noise there. */
+@media (pointer: coarse) {
+  .search > :last-child {
+    display: none;
+  }
+}

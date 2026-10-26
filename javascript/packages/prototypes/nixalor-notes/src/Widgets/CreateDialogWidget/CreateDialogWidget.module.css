@@ -150,3 +150,33 @@
   font-size: 12px;
   font-weight: 600;
 }
+
+/* Phones: the form fills the sheet and the actions sit at the bottom, thumb-sized. */
+@media (max-width: 720px) {
+  .form {
+    flex: 1;
+  }
+
+  .tabs {
+    margin: 12px 16px 0;
+  }
+
+  .body {
+    flex: 1;
+    padding: 16px;
+  }
+
+  .footer {
+    padding: 12px 16px;
+  }
+
+  .footer > button {
+    flex: 1;
+    min-height: 46px;
+  }
+
+  .location,
+  .submit-hint {
+    display: none;
+  }
+}

@@ -114,3 +114,14 @@
   gap: 1px;
   list-style: none;
 }
+
+/* Touch screens can't hover: keep ⋯ visible (it replaces the count). */
+@media (hover: none) {
+  .more {
+    display: inline-flex;
+  }
+
+  .trailing {
+    display: none;
+  }
+}

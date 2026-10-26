@@ -9,6 +9,9 @@ interface NoteOutlineProps {
   title: string;
   emptyText: string;
   resizeLabel: string;
+  /** Floats over the text (narrow screens; a bottom sheet on phones) instead of beside it. */
+  isOverlay: boolean;
+  onClose: () => void;
 }
 
 export type { NoteOutlineProps };

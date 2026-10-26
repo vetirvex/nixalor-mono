@@ -75,3 +75,10 @@
   margin: 4px 2px;
   background: var(--border);
 }
+
+/* Touch screens: no keyboard, so no shortcut hints. */
+@media (pointer: coarse) {
+  .shortcut {
+    display: none;
+  }
+}

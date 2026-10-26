@@ -53,6 +53,7 @@ const SettingsDialogWidget = memo<SettingsDialogWidgetProps>(({ onClose }) => {
       ariaLabelledBy={titleId}
       width={1200}
       top={48}
+      mobileHeight="tall"
       className={classes.dialog}
     >
       <div className={classes.layout}>

@@ -7,6 +7,7 @@ import { TopBar } from "../../Components/TopBar/TopBar";
 import { useLayout } from "../../Providers/LayoutProvider/LayoutContext";
 import { useNotes } from "../../Providers/NotesProvider/NotesContext";
 import { useExportNotePdf } from "../../Shared/Hooks/useExportNotePdf";
+import { NARROW_QUERY, useMediaQuery } from "../../Shared/Hooks/useMediaQuery";
 import { useI18n } from "../../Shared/I18n/I18nContext";
 import {
   EyeIcon,
@@ -44,13 +45,21 @@ const NotePage = memo<NotePageProps>(({ noteId }) => {
   const { t } = useI18n();
   const { folders, drawings, navigate, renameDrawing, toggleFavorite, createDrawing } =
     useNotes();
-  const { openCreate } = useLayout();
+  const { isMobile, openCreate } = useLayout();
   const { content, status, update, save } = useNoteContent(noteId);
   const editorRef = useRef<NoteEditorHandle>(null);
   const [mode, setMode] = useState<NoteMode>("edit");
   const [isRenaming, setIsRenaming] = useState(false);
   const readerRef = useRef<NoteReaderHandle>(null);
-  const [isOutlineOpen, setIsOutlineOpen] = useState(LocalSettings.getOutlineOpen);
+  // Wide screens keep the outline beside the text (remembered); narrower ones
+  // overlay it on demand, so it starts closed there.
+  const isNarrow = useMediaQuery(NARROW_QUERY);
+  const [isSideOutlineOpen, setIsSideOutlineOpen] = useState(
+    LocalSettings.getOutlineOpen
+  );
+  const [isOverlayOutlineOpen, setIsOverlayOutlineOpen] = useState(false);
+  const isOutlineOpen = isNarrow ? isOverlayOutlineOpen : isSideOutlineOpen;
+  const closeOverlayOutline = useCallback(() => setIsOverlayOutlineOpen(false), []);
   const [foldedKeys, setFoldedKeys] = useState<ReadonlySet<string>>(
     () => new Set(LocalSettings.getNoteFolds(noteId))
   );
@@ -67,7 +76,11 @@ const NotePage = memo<NotePageProps>(({ noteId }) => {
   const activeIndex = mode === "read" ? readerActiveIndex : editorActiveIndex;
 
   const toggleOutline = () => {
-    setIsOutlineOpen((open) => {
+    if (isNarrow) {
+      setIsOverlayOutlineOpen((open) => !open);
+      return;
+    }
+    setIsSideOutlineOpen((open) => {
       LocalSettings.setOutlineOpen(!open);
       return !open;
     });
@@ -101,6 +114,8 @@ const NotePage = memo<NotePageProps>(({ noteId }) => {
     if (!heading) {
       return;
     }
+    // The overlay covers the text it just scrolled to.
+    closeOverlayOutline();
     if (mode === "edit") {
       editorRef.current?.scrollToLine(heading.line);
       return;
@@ -258,13 +273,15 @@ const NotePage = memo<NotePageProps>(({ noteId }) => {
       <TopBar
         left={
           <>
-            <ItemIconButton
-              item={{ type: "drawing", id: note.id }}
-              icon={note.icon}
-              size={16}
-              color={getFileIconHex(note)}
-              fallback={<NoteIcon size={16} />}
-            />
+            {!isMobile && (
+              <ItemIconButton
+                item={{ type: "drawing", id: note.id }}
+                icon={note.icon}
+                size={16}
+                color={getFileIconHex(note)}
+                fallback={<NoteIcon size={16} />}
+              />
+            )}
             <Breadcrumbs
               folderId={note.folderId}
               current={
@@ -288,17 +305,22 @@ const NotePage = memo<NotePageProps>(({ noteId }) => {
                 )
               }
             />
-            <IconButton
-              label={
-                isFavorite ? t("common.removeFromFavorites") : t("common.addToFavorites")
-              }
-              size="sm"
-              active={isFavorite}
-              aria-pressed={isFavorite}
-              onClick={() => void toggleFavorite({ type: "drawing", id: note.id })}
-            >
-              {isFavorite ? <StarFilledIcon /> : <StarIcon />}
-            </IconButton>
+            {/* Phones: the star lives in the ⋯ menu. */}
+            {!isMobile && (
+              <IconButton
+                label={
+                  isFavorite
+                    ? t("common.removeFromFavorites")
+                    : t("common.addToFavorites")
+                }
+                size="sm"
+                active={isFavorite}
+                aria-pressed={isFavorite}
+                onClick={() => void toggleFavorite({ type: "drawing", id: note.id })}
+              >
+                {isFavorite ? <StarFilledIcon /> : <StarIcon />}
+              </IconButton>
+            )}
             <SaveStatus status={status} onSave={save} />
           </>
         }
@@ -312,36 +334,49 @@ const NotePage = memo<NotePageProps>(({ noteId }) => {
             >
               <OutlineIcon />
             </IconButton>
-            <Segmented<NoteMode>
-              label={`${t("note.mode")} (${MOD_KEY}+E)`}
-              value={mode}
-              onChange={setMode}
-              iconOnly
-              options={[
-                {
-                  value: "edit",
-                  label: `${t("note.edit")} (${MOD_KEY}+E)`,
-                  icon: <PencilIcon size={15} />,
-                },
-                {
-                  value: "read",
-                  label: `${t("note.read")} (${MOD_KEY}+E)`,
-                  icon: <EyeIcon size={15} />,
-                },
-              ]}
-            />
+            {isMobile ? (
+              // One button that switches to the other mode.
+              <IconButton
+                label={mode === "edit" ? t("note.read") : t("note.edit")}
+                onClick={toggleMode}
+              >
+                {mode === "edit" ? <EyeIcon /> : <PencilIcon />}
+              </IconButton>
+            ) : (
+              <Segmented<NoteMode>
+                label={`${t("note.mode")} (${MOD_KEY}+E)`}
+                value={mode}
+                onChange={setMode}
+                iconOnly
+                options={[
+                  {
+                    value: "edit",
+                    label: `${t("note.edit")} (${MOD_KEY}+E)`,
+                    icon: <PencilIcon size={15} />,
+                  },
+                  {
+                    value: "read",
+                    label: `${t("note.read")} (${MOD_KEY}+E)`,
+                    icon: <EyeIcon size={15} />,
+                  },
+                ]}
+              />
+            )}
             <FileActionsMenu
               file={note}
               onRename={() => setIsRenaming(true)}
               onExportPdf={exportPdf}
             />
-            <Button
-              variant="primary"
-              icon={<PlusIcon size={15} strokeWidth={2.5} />}
-              onClick={() => openCreate("note", note.folderId)}
-            >
-              {t("common.create")}
-            </Button>
+            {/* Phones create from the drawer. */}
+            {!isMobile && (
+              <Button
+                variant="primary"
+                icon={<PlusIcon size={15} strokeWidth={2.5} />}
+                onClick={() => openCreate("note", note.folderId)}
+              >
+                {t("common.create")}
+              </Button>
+            )}
           </>
         }
       />
@@ -412,6 +447,8 @@ const NotePage = memo<NotePageProps>(({ noteId }) => {
             title={t("note.outline")}
             emptyText={t("note.outlineEmpty")}
             resizeLabel={t("panel.resize")}
+            isOverlay={isNarrow}
+            onClose={closeOverlayOutline}
           />
         )}
       </section>

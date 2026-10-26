@@ -113,3 +113,11 @@
   color: var(--text-muted);
   font-size: 12px;
 }
+
+/* Touch screens: no keyboard, so no key hints (Esc, ↑↓, Tab). */
+@media (pointer: coarse) {
+  .search-row > :last-child,
+  .footer {
+    display: none;
+  }
+}

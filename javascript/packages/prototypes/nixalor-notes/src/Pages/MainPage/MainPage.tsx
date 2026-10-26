@@ -1,4 +1,5 @@
-import { memo } from "react";
+import { memo, useEffect } from "react";
+import { useLayout } from "../../Providers/LayoutProvider/LayoutContext";
 import { useNotes } from "../../Providers/NotesProvider/NotesContext";
 import { getFileKind } from "../../Shared/Storage/StorageTypes";
 import { DialogHostWidget } from "../../Widgets/DialogHostWidget/DialogHostWidget";
@@ -12,6 +13,16 @@ import classes from "./MainPage.module.css";
 
 const MainPage = memo(() => {
   const { isLoaded, route, drawings } = useNotes();
+  const { isMobile, setSidebarOpen } = useLayout();
+
+  // On phones the drawer covers the page: opening something closes it.
+  useEffect(() => {
+    if (isMobile) {
+      setSidebarOpen(false);
+    }
+    // Only a navigation should close it, not entering the phone layout.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [route]);
 
   const renderRoute = () => {
     switch (route.type) {

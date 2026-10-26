@@ -45,6 +45,8 @@
   --sidebar-width: 275px;
   --outline-width: 260px;
   --topbar-height: 56px;
+  --note-gutter: 32px;
+  --note-top-space: 40px;
   --row-height: 34px;
   --row-height-sm: 32px;
   --nav-height: 36px;
@@ -115,4 +117,23 @@
   --row-height: 28px;
   --row-height-sm: 26px;
   --nav-height: 30px;
+}
+
+/* Phones: tighter text margins. Keep 720px in sync with MOBILE_QUERY. */
+@media (max-width: 720px) {
+  :root {
+    --topbar-height: 52px;
+    --note-gutter: 18px;
+    --note-top-space: 20px;
+  }
+}
+
+/* Touch screens: rows big enough for a finger. */
+@media (pointer: coarse) {
+  :root,
+  :root[data-density="compact"] {
+    --row-height: 42px;
+    --row-height-sm: 40px;
+    --nav-height: 42px;
+  }
 }

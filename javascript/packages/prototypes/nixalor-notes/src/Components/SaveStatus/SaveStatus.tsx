@@ -19,10 +19,11 @@ const SaveStatus = memo<SaveStatusProps>(({ status, onSave }) => {
       className={classes.saveStatus}
       data-status={status}
       title={`${t("board.save")} (${MOD_KEY}+S)`}
+      aria-label={t(LABEL_KEYS[status])}
       onClick={onSave}
     >
       <span className={classes.dot} />
-      {t(LABEL_KEYS[status])}
+      <span className={classes.label}>{t(LABEL_KEYS[status])}</span>
     </button>
   );
 });

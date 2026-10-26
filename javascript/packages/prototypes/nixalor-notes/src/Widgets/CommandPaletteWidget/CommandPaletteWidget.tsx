@@ -235,7 +235,13 @@ const CommandPaletteWidget = memo<CommandPaletteWidgetProps>(({ onClose }) => {
   };
 
   return (
-    <Dialog onClose={onClose} ariaLabel={t("palette.label")} width={620} top={110}>
+    <Dialog
+      onClose={onClose}
+      ariaLabel={t("palette.label")}
+      width={620}
+      top={110}
+      mobileHeight="tall"
+    >
       <div className={classes.searchRow}>
         <SearchIcon size={18} className={classes.searchIcon} />
         <input

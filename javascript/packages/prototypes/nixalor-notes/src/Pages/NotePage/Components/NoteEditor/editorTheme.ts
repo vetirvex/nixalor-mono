@@ -11,7 +11,8 @@ import { tags } from "@lezer/highlight";
  * .cm-content) because CodeMirror measures selection and cursor geometry from
  * line padding — padding on .cm-content made selections overhang the text.
  */
-const GUTTER = "32px";
+// Side margin of the text column (smaller on phones, see Tokens.css).
+const GUTTER = "var(--note-gutter)";
 
 const editorTheme = EditorView.theme({
   "&": {
@@ -28,7 +29,7 @@ const editorTheme = EditorView.theme({
   ".cm-content": {
     maxWidth: `calc(760px + 2 * ${GUTTER})`,
     margin: "0 auto",
-    padding: "40px 0 40vh",
+    padding: "var(--note-top-space) 0 40vh",
   },
   ".cm-line": { padding: `0 ${GUTTER}` },
   ".cm-note-title": { padding: `0 ${GUTTER}`, marginBottom: "0.5em" },

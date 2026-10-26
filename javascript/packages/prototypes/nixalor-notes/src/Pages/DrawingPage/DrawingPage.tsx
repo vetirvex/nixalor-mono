@@ -23,7 +23,7 @@ import type { DrawingPageProps } from "./DrawingPageTypes";
 const DrawingPage = memo<DrawingPageProps>(({ drawingId }) => {
   const { t } = useI18n();
   const { drawings, renameDrawing, toggleFavorite } = useNotes();
-  const { openCreate } = useLayout();
+  const { isMobile, openCreate } = useLayout();
   const editorRef = useRef<DrawingEditorHandle>(null);
   const [status, setStatus] = useState<Status>("saved");
   const [isRenaming, setIsRenaming] = useState(false);
@@ -39,13 +39,15 @@ const DrawingPage = memo<DrawingPageProps>(({ drawingId }) => {
       <TopBar
         left={
           <>
-            <ItemIconButton
-              item={{ type: "drawing", id: drawing.id }}
-              icon={drawing.icon}
-              size={16}
-              color={getFileIconHex(drawing)}
-              fallback={<BoardIcon size={16} />}
-            />
+            {!isMobile && (
+              <ItemIconButton
+                item={{ type: "drawing", id: drawing.id }}
+                icon={drawing.icon}
+                size={16}
+                color={getFileIconHex(drawing)}
+                fallback={<BoardIcon size={16} />}
+              />
+            )}
             <Breadcrumbs
               folderId={drawing.folderId}
               current={
@@ -69,17 +71,22 @@ const DrawingPage = memo<DrawingPageProps>(({ drawingId }) => {
                 )
               }
             />
-            <IconButton
-              label={
-                isFavorite ? t("common.removeFromFavorites") : t("common.addToFavorites")
-              }
-              size="sm"
-              active={isFavorite}
-              aria-pressed={isFavorite}
-              onClick={() => void toggleFavorite({ type: "drawing", id: drawing.id })}
-            >
-              {isFavorite ? <StarFilledIcon /> : <StarIcon />}
-            </IconButton>
+            {/* Phones: the star lives in the ⋯ menu. */}
+            {!isMobile && (
+              <IconButton
+                label={
+                  isFavorite
+                    ? t("common.removeFromFavorites")
+                    : t("common.addToFavorites")
+                }
+                size="sm"
+                active={isFavorite}
+                aria-pressed={isFavorite}
+                onClick={() => void toggleFavorite({ type: "drawing", id: drawing.id })}
+              >
+                {isFavorite ? <StarFilledIcon /> : <StarIcon />}
+              </IconButton>
+            )}
             <SaveStatus status={status} onSave={() => editorRef.current?.save()} />
           </>
         }
@@ -90,13 +97,16 @@ const DrawingPage = memo<DrawingPageProps>(({ drawingId }) => {
               onRename={() => setIsRenaming(true)}
               onExportImage={() => editorRef.current?.openExport()}
             />
-            <Button
-              variant="primary"
-              icon={<PlusIcon size={15} strokeWidth={2.5} />}
-              onClick={() => openCreate("board", drawing.folderId)}
-            >
-              {t("common.create")}
-            </Button>
+            {/* Phones create from the drawer. */}
+            {!isMobile && (
+              <Button
+                variant="primary"
+                icon={<PlusIcon size={15} strokeWidth={2.5} />}
+                onClick={() => openCreate("board", drawing.folderId)}
+              >
+                {t("common.create")}
+              </Button>
+            )}
           </>
         }
       />

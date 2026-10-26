@@ -126,3 +126,28 @@
   appearance: none;
   cursor: pointer;
 }
+
+@media (max-width: 720px) {
+  .content {
+    gap: 20px;
+    padding: 18px 16px 40px;
+  }
+
+  .title {
+    font-size: 24px;
+  }
+
+  .subtitle {
+    font-size: 13px;
+  }
+
+  .actions {
+    width: 100%;
+  }
+
+  /* Two columns of cards still fit a phone. */
+  .tiles {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 10px;
+  }
+}

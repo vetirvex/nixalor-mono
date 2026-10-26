@@ -1,4 +1,5 @@
 import { memo, useCallback, useEffect, useMemo, useState } from "react";
+import { MOBILE_QUERY, useMediaQuery } from "../../Shared/Hooks/useMediaQuery";
 import { LocalSettings } from "../../Shared/Storage/LocalSettings";
 import type { MenuAnchor } from "../../Shared/Ui/Menu/MenuTypes";
 import type { ItemRef } from "../NotesProvider/NotesTypes";
@@ -6,20 +7,38 @@ import { LayoutContext } from "./LayoutContext";
 import type { CreateTab, DialogState, LayoutProviderProps } from "./LayoutTypes";
 
 const LayoutProvider = memo<LayoutProviderProps>(({ children }) => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(LocalSettings.getSidebarOpen);
+  const isMobile = useMediaQuery(MOBILE_QUERY);
+  const [isDesktopSidebarOpen, setIsDesktopSidebarOpen] = useState(
+    LocalSettings.getSidebarOpen
+  );
+  // On phones the sidebar is a drawer over the page: it starts closed and isn't remembered.
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const isSidebarOpen = isMobile ? isDrawerOpen : isDesktopSidebarOpen;
   const [dialog, setDialog] = useState<DialogState>(null);
 
-  const setSidebarOpen = useCallback((open: boolean) => {
-    setIsSidebarOpen(open);
-    LocalSettings.setSidebarOpen(open);
-  }, []);
+  const setSidebarOpen = useCallback(
+    (open: boolean) => {
+      if (isMobile) {
+        setIsDrawerOpen(open);
+      } else {
+        setIsDesktopSidebarOpen(open);
+        LocalSettings.setSidebarOpen(open);
+      }
+    },
+    [isMobile]
+  );
 
-  const toggleSidebar = useCallback(() => {
-    setIsSidebarOpen((prev) => {
-      LocalSettings.setSidebarOpen(!prev);
-      return !prev;
-    });
-  }, []);
+  const toggleSidebar = useCallback(
+    () => setSidebarOpen(!isSidebarOpen),
+    [isSidebarOpen, setSidebarOpen]
+  );
+
+  // Leaving the phone layout must not leave an invisible drawer "open".
+  useEffect(() => {
+    if (!isMobile) {
+      setIsDrawerOpen(false);
+    }
+  }, [isMobile]);
 
   const openPalette = useCallback(() => setDialog({ type: "palette" }), []);
   const openCreate = useCallback(
@@ -61,6 +80,7 @@ const LayoutProvider = memo<LayoutProviderProps>(({ children }) => {
 
   const value = useMemo(
     () => ({
+      isMobile,
       isSidebarOpen,
       setSidebarOpen,
       toggleSidebar,
@@ -73,6 +93,7 @@ const LayoutProvider = memo<LayoutProviderProps>(({ children }) => {
       closeDialog,
     }),
     [
+      isMobile,
       isSidebarOpen,
       setSidebarOpen,
       toggleSidebar,
