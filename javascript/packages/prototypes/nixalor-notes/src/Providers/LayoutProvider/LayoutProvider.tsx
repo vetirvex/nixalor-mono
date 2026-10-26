@@ -1,5 +1,6 @@
 import { memo, useCallback, useEffect, useMemo, useState } from "react";
 import { LocalSettings } from "../../Shared/Storage/LocalSettings";
+import type { MenuAnchor } from "../../Shared/Ui/Menu/MenuTypes";
 import type { ItemRef } from "../NotesProvider/NotesTypes";
 import { LayoutContext } from "./LayoutContext";
 import type { CreateTab, DialogState, LayoutProviderProps } from "./LayoutTypes";
@@ -29,6 +30,10 @@ const LayoutProvider = memo<LayoutProviderProps>(({ children }) => {
   const openSettings = useCallback(() => setDialog({ type: "settings" }), []);
   const openMove = useCallback(
     (items: ItemRef[]) => setDialog({ type: "move", items }),
+    []
+  );
+  const openIconPicker = useCallback(
+    (item: ItemRef, anchor: MenuAnchor) => setDialog({ type: "icon", item, anchor }),
     []
   );
   const closeDialog = useCallback(() => setDialog(null), []);
@@ -64,6 +69,7 @@ const LayoutProvider = memo<LayoutProviderProps>(({ children }) => {
       openCreate,
       openSettings,
       openMove,
+      openIconPicker,
       closeDialog,
     }),
     [
@@ -75,6 +81,7 @@ const LayoutProvider = memo<LayoutProviderProps>(({ children }) => {
       openCreate,
       openSettings,
       openMove,
+      openIconPicker,
       closeDialog,
     ]
   );

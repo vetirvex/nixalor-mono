@@ -1,15 +1,17 @@
 import { memo, useRef, useState } from "react";
 import { Breadcrumbs } from "../../Components/Breadcrumbs/Breadcrumbs";
 import { FileActionsMenu } from "../../Components/FileActionsMenu/FileActionsMenu";
+import { ItemIconButton } from "../../Components/ItemIconButton/ItemIconButton";
 import { SaveStatus } from "../../Components/SaveStatus/SaveStatus";
 import { TopBar } from "../../Components/TopBar/TopBar";
 import { useLayout } from "../../Providers/LayoutProvider/LayoutContext";
 import { useNotes } from "../../Providers/NotesProvider/NotesContext";
 import { useI18n } from "../../Shared/I18n/I18nContext";
-import { PlusIcon, StarFilledIcon, StarIcon } from "../../Shared/Icons/Icons";
+import { BoardIcon, PlusIcon, StarFilledIcon, StarIcon } from "../../Shared/Icons/Icons";
 import { Button } from "../../Shared/Ui/Button/Button";
 import { IconButton } from "../../Shared/Ui/IconButton/IconButton";
 import { NameInput } from "../../Shared/Ui/NameInput/NameInput";
+import { getFileIconHex } from "../../Shared/Utils/folderColors";
 import { DrawingEditor } from "./Components/DrawingEditor/DrawingEditor";
 import type {
   DrawingEditorHandle,
@@ -37,6 +39,13 @@ const DrawingPage = memo<DrawingPageProps>(({ drawingId }) => {
       <TopBar
         left={
           <>
+            <ItemIconButton
+              item={{ type: "drawing", id: drawing.id }}
+              icon={drawing.icon}
+              size={16}
+              color={getFileIconHex(drawing)}
+              fallback={<BoardIcon size={16} />}
+            />
             <Breadcrumbs
               folderId={drawing.folderId}
               current={

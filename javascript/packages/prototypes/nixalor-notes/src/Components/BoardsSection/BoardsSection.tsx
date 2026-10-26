@@ -3,7 +3,7 @@ import classes from "../../Pages/Shared/PageLayout.module.css";
 import { useLayout } from "../../Providers/LayoutProvider/LayoutContext";
 import { useNotes } from "../../Providers/NotesProvider/NotesContext";
 import { useI18n } from "../../Shared/I18n/I18nContext";
-import { getFolderHex } from "../../Shared/Utils/folderColors";
+import { getFileIconHex, getFolderHex } from "../../Shared/Utils/folderColors";
 import { getFolderPath } from "../../Shared/Utils/folderTree";
 import { BoardsTable } from "../BoardsTable/BoardsTable";
 import { BulkBar } from "../BulkBar/BulkBar";
@@ -60,6 +60,8 @@ const BoardsSection = memo<BoardsSectionProps>(({ boards, view }) => {
               <Tile
                 key={board.id}
                 item={{ type: "drawing", id: board.id }}
+                icon={board.icon}
+                iconColor={getFileIconHex(board)}
                 color={getFolderHex(path[path.length - 1])}
                 preview={<FileThumbnail file={board} />}
                 title={board.name}

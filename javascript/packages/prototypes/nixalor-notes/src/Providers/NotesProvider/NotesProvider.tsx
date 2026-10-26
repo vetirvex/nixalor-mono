@@ -435,6 +435,40 @@ const NotesProvider = memo<NotesProviderProps>(({ children }) => {
     [replaceDrawing, replaceFolder]
   );
 
+  const setItemIcon = useCallback(
+    async (item: ItemRef, icon: string | null) => {
+      // Like favorites: metadata, so updatedAt (used for sorting) stays as is.
+      if (item.type === "folder") {
+        const folder = foldersRef.current.find((f) => f.id === item.id);
+        if (folder) {
+          const updated = { ...folder, icon };
+          replaceFolder(updated);
+          await NotesDb.putFolder(updated);
+        }
+        return;
+      }
+      const drawing = drawingsRef.current.find((d) => d.id === item.id);
+      if (drawing) {
+        const updated = { ...drawing, icon };
+        replaceDrawing(updated);
+        await NotesDb.putDrawing(updated);
+      }
+    },
+    [replaceDrawing, replaceFolder]
+  );
+
+  const setFileIconColor = useCallback(
+    async (id: string, iconColor: FolderColor | null) => {
+      const drawing = drawingsRef.current.find((d) => d.id === id);
+      if (drawing) {
+        const updated = { ...drawing, iconColor };
+        replaceDrawing(updated);
+        await NotesDb.putDrawing(updated);
+      }
+    },
+    [replaceDrawing]
+  );
+
   const loadScene = useCallback((id: string) => NotesDb.getScene(id), []);
 
   const loadNote = useCallback(
@@ -494,6 +528,8 @@ const NotesProvider = memo<NotesProviderProps>(({ children }) => {
       duplicateDrawing,
       downloadDrawing,
       toggleFavorite,
+      setItemIcon,
+      setFileIconColor,
       deleteItems,
       loadScene,
       saveScene,
@@ -521,6 +557,8 @@ const NotesProvider = memo<NotesProviderProps>(({ children }) => {
       duplicateDrawing,
       downloadDrawing,
       toggleFavorite,
+      setItemIcon,
+      setFileIconColor,
       deleteItems,
       loadScene,
       saveScene,

@@ -7,6 +7,10 @@ interface TileProps {
   color: string;
   preview: ReactNode;
   title: string;
+  /** Custom icon shown before the title. */
+  icon?: string | null;
+  /** Folder color tints a custom folder icon. */
+  iconColor?: string;
   meta: string;
   isFavorite: boolean;
   isSelected?: boolean;

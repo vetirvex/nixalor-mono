@@ -10,10 +10,12 @@ import {
   MoreIcon,
   MoveIcon,
   PencilIcon,
+  SmileIcon,
   TrashIcon,
 } from "../../Shared/Icons/Icons";
 import { getFileKind } from "../../Shared/Storage/StorageTypes";
 import { IconButton } from "../../Shared/Ui/IconButton/IconButton";
+import { toPointAnchor } from "../../Shared/Ui/Menu/anchor";
 import { Menu, MenuItem, MenuSeparator } from "../../Shared/Ui/Menu/Menu";
 import { useMenu } from "../../Shared/Ui/Menu/useMenu";
 import { useConfirmDelete } from "../ItemMenu/useConfirmDelete";
@@ -24,7 +26,7 @@ const FileActionsMenu = memo<FileActionsMenuProps>(
   ({ file, onRename, onExportImage }) => {
     const { t } = useI18n();
     const { downloadDrawing, duplicateDrawing } = useNotes();
-    const { openMove } = useLayout();
+    const { openMove, openIconPicker } = useLayout();
     const importFile = useImportFile();
     const confirmDelete = useConfirmDelete();
     const menu = useMenu();
@@ -65,6 +67,11 @@ const FileActionsMenu = memo<FileActionsMenuProps>(
               icon={<PencilIcon />}
               label={t("common.rename")}
               onSelect={onRename}
+            />
+            <MenuItem
+              icon={<SmileIcon />}
+              label={t("icon.change")}
+              onSelect={() => openIconPicker(item, toPointAnchor(menu.anchor!))}
             />
             <MenuItem
               icon={<CopyIcon />}

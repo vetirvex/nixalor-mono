@@ -5,6 +5,7 @@ import { PlusIcon } from "../../Shared/Icons/Icons";
 import { useMenu } from "../../Shared/Ui/Menu/useMenu";
 import { getFolderHex } from "../../Shared/Utils/folderColors";
 import { ColorMark } from "../ColorMark/ColorMark";
+import { ItemIcon } from "../ItemIcon/ItemIcon";
 import { ItemMenu } from "../ItemMenu/ItemMenu";
 import classes from "./FolderChips.module.css";
 import type { FolderChipProps, FolderChipsProps } from "./FolderChipsTypes";
@@ -20,7 +21,12 @@ const FolderChip = memo<FolderChipProps>(({ folder, count }) => {
         onClick={() => navigate({ type: "folder", id: folder.id })}
         onContextMenu={menu.openAtPointer}
       >
-        <ColorMark color={getFolderHex(folder)} />
+        <ItemIcon
+          icon={folder.icon}
+          size={16}
+          color={getFolderHex(folder)}
+          fallback={<ColorMark color={getFolderHex(folder)} />}
+        />
         <span className={classes.name}>{folder.name}</span>
         <span className={classes.count}>{count}</span>
       </button>

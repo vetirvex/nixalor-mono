@@ -1,5 +1,6 @@
 interface ColorSwatchOption<T extends string> {
   value: T;
+  /** Any CSS background (a color or a gradient). */
   hex: string;
   label: string;
 }

@@ -1,78 +1,19 @@
-import { memo, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { memo, useEffect, useRef } from "react";
 import type { KeyboardEvent } from "react";
 import { createPortal } from "react-dom";
+import { usePopover } from "../Popover/usePopover";
 import classes from "./Menu.module.css";
 import { MenuCloseContext, useMenuClose } from "./MenuContext";
 import type { MenuItemProps, MenuProps, MenuSectionProps } from "./MenuTypes";
 
-const GAP = 4;
-const MARGIN = 8;
-
 const Menu = memo<MenuProps>(
   ({ anchor, onClose, align = "start", minWidth = 200, label, children }) => {
     const menuRef = useRef<HTMLDivElement>(null);
-    const [position, setPosition] = useState<{ left: number; top: number } | null>(null);
-    const onCloseRef = useRef(onClose);
-    onCloseRef.current = onClose;
-
-    // Measure after render, then clamp into the viewport (flip up when needed).
-    useLayoutEffect(() => {
-      const menu = menuRef.current;
-      if (!menu) {
-        return;
-      }
-      const { width, height } = menu.getBoundingClientRect();
-      let left: number;
-      let top: number;
-      let flipTop: number;
-      if ("element" in anchor) {
-        const rect = anchor.element.getBoundingClientRect();
-        left = align === "end" ? rect.right - width : rect.left;
-        top = rect.bottom + GAP;
-        flipTop = rect.top - height - GAP;
-      } else {
-        left = anchor.x;
-        top = anchor.y;
-        flipTop = anchor.y - height;
-      }
-      if (top + height > window.innerHeight - MARGIN && flipTop > MARGIN) {
-        top = flipTop;
-      }
-      left = Math.min(Math.max(MARGIN, left), window.innerWidth - width - MARGIN);
-      top = Math.min(Math.max(MARGIN, top), window.innerHeight - height - MARGIN);
-      setPosition({ left, top });
-    }, [anchor, align]);
+    const position = usePopover(menuRef, anchor, align, onClose);
 
     useEffect(() => {
       menuRef.current?.querySelector<HTMLElement>('[role="menuitem"]')?.focus();
-      const onPointerDown = (event: PointerEvent) => {
-        const target = event.target as Node;
-        if (menuRef.current?.contains(target)) {
-          return;
-        }
-        if ("element" in anchor && anchor.element.contains(target)) {
-          return; // the trigger toggles the menu itself
-        }
-        onCloseRef.current();
-      };
-      const onKey = (event: globalThis.KeyboardEvent) => {
-        if (event.key === "Escape") {
-          event.stopPropagation();
-          onCloseRef.current();
-        }
-      };
-      const onBlurWindow = () => onCloseRef.current();
-      window.addEventListener("pointerdown", onPointerDown, { capture: true });
-      window.addEventListener("keydown", onKey, { capture: true });
-      window.addEventListener("resize", onBlurWindow);
-      window.addEventListener("blur", onBlurWindow);
-      return () => {
-        window.removeEventListener("pointerdown", onPointerDown, { capture: true });
-        window.removeEventListener("keydown", onKey, { capture: true });
-        window.removeEventListener("resize", onBlurWindow);
-        window.removeEventListener("blur", onBlurWindow);
-      };
-    }, [anchor]);
+    }, []);
 
     // Arrow keys move between items, like a native menu.
     const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
@@ -95,12 +36,7 @@ const Menu = memo<MenuProps>(
           role="menu"
           aria-label={label}
           className={classes.menu}
-          style={{
-            minWidth,
-            left: position?.left ?? -9999,
-            top: position?.top ?? -9999,
-            visibility: position ? "visible" : "hidden",
-          }}
+          style={{ minWidth, ...position }}
           onKeyDown={handleKeyDown}
           onContextMenu={(event) => event.preventDefault()}
         >

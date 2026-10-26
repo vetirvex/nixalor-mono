@@ -27,33 +27,65 @@
   color: var(--accent);
 }
 
-.star {
+.arrow {
+  color: var(--text-muted);
+  transition: transform 0.12s ease;
+}
+
+.header:hover .arrow,
+.header[aria-current="page"] .arrow {
   color: var(--accent);
+  transform: translateX(2px);
 }
 
 .item {
   display: flex;
   align-items: center;
-  gap: 8px;
   min-height: var(--row-height-sm);
-  padding: 0 10px;
-  border: none;
+  padding-right: 4px;
   border-radius: var(--radius-sm);
-  background: transparent;
   color: var(--text-secondary);
   font-size: 14px;
   font-weight: 500;
-  text-align: left;
 }
 
 .item:hover {
   background: var(--surface-hover);
 }
 
-.item[aria-current="page"] {
+.item[data-current="true"] {
   background: var(--accent-soft-bg);
   color: var(--accent-soft-text);
   font-weight: 700;
+}
+
+.open {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  min-height: var(--row-height-sm);
+  padding: 0 0 0 10px;
+  border: none;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+}
+
+.badge {
+  margin: 0 6px;
+}
+
+/* The × shows on hover (or keyboard focus) so the list stays clean. */
+.remove {
+  display: none;
+}
+
+.item:hover .remove,
+.item:focus-within .remove {
+  display: inline-flex;
 }
 
 .name {

@@ -67,6 +67,9 @@
 }
 
 .title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
   overflow: hidden;
   font-size: 14px;
   font-weight: 700;

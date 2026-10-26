@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import type { MenuAnchor } from "../../Shared/Ui/Menu/MenuTypes";
 import type { ItemRef } from "../NotesProvider/NotesTypes";
 
 type CreateTab = "board" | "note" | "folder";
@@ -9,6 +10,8 @@ type DialogState =
   | { type: "create"; tab: CreateTab; folderId: string | null }
   | { type: "settings" }
   | { type: "move"; items: ItemRef[] }
+  /** Icon picker popover, anchored where it was opened from. */
+  | { type: "icon"; item: ItemRef; anchor: MenuAnchor }
   | null;
 
 interface LayoutContextValue {
@@ -21,6 +24,7 @@ interface LayoutContextValue {
   openCreate: (tab: CreateTab, folderId: string | null) => void;
   openSettings: () => void;
   openMove: (items: ItemRef[]) => void;
+  openIconPicker: (item: ItemRef, anchor: MenuAnchor) => void;
   closeDialog: () => void;
 }
 

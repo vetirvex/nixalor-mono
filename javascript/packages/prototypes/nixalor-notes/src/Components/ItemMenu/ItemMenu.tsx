@@ -11,20 +11,14 @@ import {
   MoveIcon,
   PencilIcon,
   PlusIcon,
+  SmileIcon,
   StarFilledIcon,
   StarIcon,
   TrashIcon,
 } from "../../Shared/Icons/Icons";
-import type { FolderColor } from "../../Shared/Storage/StorageTypes";
 import { getFileKind } from "../../Shared/Storage/StorageTypes";
-import { ColorSwatches } from "../../Shared/Ui/ColorSwatches/ColorSwatches";
-import { Menu, MenuItem, MenuSection, MenuSeparator } from "../../Shared/Ui/Menu/Menu";
-import {
-  FOLDER_COLOR_KEYS,
-  FOLDER_COLORS,
-  getFolderColor,
-} from "../../Shared/Utils/folderColors";
-import classes from "./ItemMenu.module.css";
+import { toPointAnchor } from "../../Shared/Ui/Menu/anchor";
+import { Menu, MenuItem, MenuSeparator } from "../../Shared/Ui/Menu/Menu";
 import type { ItemMenuProps } from "./ItemMenuTypes";
 import { useConfirmDelete } from "./useConfirmDelete";
 
@@ -38,9 +32,8 @@ const ItemMenu = memo<ItemMenuProps>(({ item, anchor, onClose, onRename, align }
     toggleFavorite,
     duplicateDrawing,
     downloadDrawing,
-    setFolderColor,
   } = useNotes();
-  const { openCreate, openMove } = useLayout();
+  const { openCreate, openMove, openIconPicker } = useLayout();
   const confirmDelete = useConfirmDelete();
 
   const entity =
@@ -51,6 +44,8 @@ const ItemMenu = memo<ItemMenuProps>(({ item, anchor, onClose, onRename, align }
     return null;
   }
   const isFavorite = Boolean(entity.favoritedAt);
+  // Captured now: the trigger may be hidden once the menu closes.
+  const pickerAnchor = toPointAnchor(anchor);
   const folder =
     item.type === "folder" ? folders.find((f) => f.id === item.id) : undefined;
   const file =
@@ -88,6 +83,11 @@ const ItemMenu = memo<ItemMenuProps>(({ item, anchor, onClose, onRename, align }
         <MenuItem icon={<PencilIcon />} label={t("common.rename")} onSelect={onRename} />
       )}
       <MenuItem
+        icon={<SmileIcon />}
+        label={t("icon.change")}
+        onSelect={() => openIconPicker(item, pickerAnchor)}
+      />
+      <MenuItem
         icon={isFavorite ? <StarFilledIcon /> : <StarIcon />}
         label={isFavorite ? t("common.removeFromFavorites") : t("common.addToFavorites")}
         onSelect={() => void toggleFavorite(item)}
@@ -110,23 +110,6 @@ const ItemMenu = memo<ItemMenuProps>(({ item, anchor, onClose, onRename, align }
             onSelect={() => void downloadDrawing(item.id)}
           />
         </>
-      )}
-      {folder && (
-        <MenuSection label={t("tree.color")}>
-          <div className={classes.colors}>
-            <ColorSwatches<FolderColor>
-              size="sm"
-              label={t("tree.color")}
-              value={getFolderColor(folder)}
-              options={FOLDER_COLOR_KEYS.map((key) => ({
-                value: key,
-                hex: FOLDER_COLORS[key],
-                label: t(`color.${key}`),
-              }))}
-              onChange={(color) => void setFolderColor(folder.id, color)}
-            />
-          </div>
-        </MenuSection>
       )}
       <MenuSeparator />
       <MenuItem

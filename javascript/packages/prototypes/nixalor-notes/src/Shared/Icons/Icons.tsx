@@ -273,6 +273,15 @@ const OutlineIcon = createIcon(
   </>
 );
 
+const SmileIcon = createIcon(
+  "SmileIcon",
+  <>
+    <circle cx="12" cy="12" r="10" />
+    <path d="M8 14s1.5 2 4 2 4-2 4-2" />
+    <path d="M9 9h.01M15 9h.01" />
+  </>
+);
+
 export {
   BoardIcon,
   CheckIcon,
@@ -299,6 +308,7 @@ export {
   SearchIcon,
   SettingsIcon,
   SidebarIcon,
+  SmileIcon,
   StarFilledIcon,
   StarIcon,
   SunIcon,

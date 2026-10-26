@@ -72,6 +72,10 @@
   color: inherit;
 }
 
+.row[data-kind="folder"] .leading {
+  color: inherit;
+}
+
 .name {
   flex: 1;
   min-width: 0;

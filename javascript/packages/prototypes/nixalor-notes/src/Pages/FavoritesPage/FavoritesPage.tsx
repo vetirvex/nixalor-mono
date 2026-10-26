@@ -1,12 +1,13 @@
 import { memo, useMemo, useState } from "react";
 import { FileThumbnail } from "../../Components/FileThumbnail/FileThumbnail";
+import { ItemIcon } from "../../Components/ItemIcon/ItemIcon";
 import { Tile } from "../../Components/Tile/Tile";
 import { TopBar } from "../../Components/TopBar/TopBar";
 import { useNotes } from "../../Providers/NotesProvider/NotesContext";
 import { useI18n } from "../../Shared/I18n/I18nContext";
 import { FolderFilledIcon } from "../../Shared/Icons/Icons";
 import { Segmented } from "../../Shared/Ui/Segmented/Segmented";
-import { getFolderHex } from "../../Shared/Utils/folderColors";
+import { getFileIconHex, getFolderHex } from "../../Shared/Utils/folderColors";
 import { countBoardsInSubtree, getFolderPath } from "../../Shared/Utils/folderTree";
 import classes from "../Shared/PageLayout.module.css";
 import type { FavoritesPageProps } from "./FavoritesPageTypes";
@@ -34,8 +35,17 @@ const FavoritesPage = memo<FavoritesPageProps>(() => {
                     key={`folder:${folder.id}`}
                     item={{ type: "folder", id: folder.id }}
                     color={color}
+                    icon={folder.icon}
+                    iconColor={color}
                     preview={
-                      <FolderFilledIcon size={56} strokeWidth={0} style={{ color }} />
+                      <ItemIcon
+                        icon={folder.icon}
+                        size={48}
+                        color={color}
+                        fallback={
+                          <FolderFilledIcon size={56} strokeWidth={0} style={{ color }} />
+                        }
+                      />
                     }
                     title={folder.name}
                     meta={t("favorites.folderMeta", {
@@ -64,6 +74,8 @@ const FavoritesPage = memo<FavoritesPageProps>(() => {
                   <Tile
                     key={`drawing:${board.id}`}
                     item={{ type: "drawing", id: board.id }}
+                    icon={board.icon}
+                    iconColor={getFileIconHex(board)}
                     color={getFolderHex(path[path.length - 1])}
                     preview={<FileThumbnail file={board} />}
                     title={board.name}

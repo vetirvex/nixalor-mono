@@ -1,4 +1,4 @@
-import type { Folder, FolderColor } from "../Storage/StorageTypes";
+import type { Drawing, Folder, FolderColor } from "../Storage/StorageTypes";
 
 const FOLDER_COLORS: Record<FolderColor, string> = {
   orange: "#f97316",
@@ -20,6 +20,10 @@ const getFolderColor = (folder: Folder | null | undefined): FolderColor =>
 const getFolderHex = (folder: Folder | null | undefined) =>
   FOLDER_COLORS[getFolderColor(folder)];
 
+/** Hex color of a board/note icon, or undefined for the neutral default. */
+const getFileIconHex = (file: Pick<Drawing, "iconColor"> | null | undefined) =>
+  file?.iconColor ? FOLDER_COLORS[file.iconColor] : undefined;
+
 /** Cycles through the palette so sibling folders don't all start the same color. */
 const pickNextFolderColor = (existingCount: number): FolderColor =>
   FOLDER_COLOR_KEYS[existingCount % (FOLDER_COLOR_KEYS.length - 1)] ?? "gray";
@@ -27,6 +31,7 @@ const pickNextFolderColor = (existingCount: number): FolderColor =>
 export {
   FOLDER_COLOR_KEYS,
   FOLDER_COLORS,
+  getFileIconHex,
   getFolderColor,
   getFolderHex,
   pickNextFolderColor,

@@ -118,7 +118,6 @@ const ru = {
 
   "tree.newBoardInside": "Новая доска внутри",
   "tree.newSubfolder": "Новая подпапка",
-  "tree.color": "Цвет",
 
   "board.saved": "Сохранено",
   "board.unsaved": "Не сохранено",
@@ -215,6 +214,16 @@ const ru = {
   "confirm.deleteFolderEmpty.message": "Папка «{name}» будет удалена.",
   "confirm.deleteMany.title": "Удалить выбранное?",
   "confirm.deleteMany.message": "Будет удалено элементов: {count}. Это нельзя отменить.",
+
+  "icon.title": "Иконка и цвет",
+  "icon.change": "Иконка и цвет",
+  "icon.color": "Цвет",
+  "icon.defaultColor": "Без цвета",
+  "icon.tab.icons": "Иконки",
+  "icon.tab.emoji": "Эмодзи",
+  "icon.search": "Поиск иконки",
+  "icon.emojiPlaceholder": "Вставьте любой эмодзи",
+  "icon.reset": "Сбросить",
 
   "settings.title": "Настройки",
   "settings.section.app": "Приложение",

@@ -1,5 +1,6 @@
 import { Fragment, memo, useEffect, useMemo, useRef, useState } from "react";
 import type { KeyboardEvent } from "react";
+import { ItemIcon } from "../../Components/ItemIcon/ItemIcon";
 import { useLayout } from "../../Providers/LayoutProvider/LayoutContext";
 import { useNotes } from "../../Providers/NotesProvider/NotesContext";
 import { useSettings } from "../../Providers/SettingsProvider/SettingsContext";
@@ -20,7 +21,7 @@ import {
 import { getFileKind } from "../../Shared/Storage/StorageTypes";
 import { Dialog } from "../../Shared/Ui/Dialog/Dialog";
 import { Kbd } from "../../Shared/Ui/Kbd/Kbd";
-import { getFolderHex } from "../../Shared/Utils/folderColors";
+import { getFileIconHex, getFolderHex } from "../../Shared/Utils/folderColors";
 import { countBoardsInSubtree, getFolderPath } from "../../Shared/Utils/folderTree";
 import { MOD_KEY } from "../../Shared/Utils/platform";
 import classes from "./CommandPaletteWidget.module.css";
@@ -70,9 +71,22 @@ const CommandPaletteWidget = memo<CommandPaletteWidgetProps>(({ onClose }) => {
     ).map((board) => ({
       key: `board:${board.id}`,
       group: q ? "boards" : "recent",
-      icon:
-        getFileKind(board) === "note" ? <NoteIcon size={13} /> : <PencilIcon size={13} />,
-      iconColor: getFolderHex(board.folderId ? folderById.get(board.folderId) : null),
+      icon: (
+        <ItemIcon
+          icon={board.icon}
+          size={14}
+          fallback={
+            getFileKind(board) === "note" ? (
+              <NoteIcon size={13} />
+            ) : (
+              <PencilIcon size={13} />
+            )
+          }
+        />
+      ),
+      iconColor:
+        getFileIconHex(board) ??
+        getFolderHex(board.folderId ? folderById.get(board.folderId) : null),
       title: board.name,
       subtitle: pathLabel(board.folderId),
       run: () => navigate({ type: "drawing", id: board.id }),
@@ -87,7 +101,13 @@ const CommandPaletteWidget = memo<CommandPaletteWidgetProps>(({ onClose }) => {
       .map((folder) => ({
         key: `folder:${folder.id}`,
         group: "folders",
-        icon: <FolderIcon size={13} strokeWidth={2.5} />,
+        icon: (
+          <ItemIcon
+            icon={folder.icon}
+            size={14}
+            fallback={<FolderIcon size={13} strokeWidth={2.5} />}
+          />
+        ),
         iconBackground: getFolderHex(folder),
         iconColor: "var(--on-accent)",
         title: folder.name,

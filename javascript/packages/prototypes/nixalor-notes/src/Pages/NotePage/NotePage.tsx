@@ -1,6 +1,7 @@
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Breadcrumbs } from "../../Components/Breadcrumbs/Breadcrumbs";
 import { FileActionsMenu } from "../../Components/FileActionsMenu/FileActionsMenu";
+import { ItemIconButton } from "../../Components/ItemIconButton/ItemIconButton";
 import { SaveStatus } from "../../Components/SaveStatus/SaveStatus";
 import { TopBar } from "../../Components/TopBar/TopBar";
 import { useLayout } from "../../Providers/LayoutProvider/LayoutContext";
@@ -8,6 +9,7 @@ import { useNotes } from "../../Providers/NotesProvider/NotesContext";
 import { useI18n } from "../../Shared/I18n/I18nContext";
 import {
   EyeIcon,
+  NoteIcon,
   OutlineIcon,
   PencilIcon,
   PlusIcon,
@@ -20,6 +22,7 @@ import { Button } from "../../Shared/Ui/Button/Button";
 import { IconButton } from "../../Shared/Ui/IconButton/IconButton";
 import { NameInput } from "../../Shared/Ui/NameInput/NameInput";
 import { Segmented } from "../../Shared/Ui/Segmented/Segmented";
+import { getFileIconHex } from "../../Shared/Utils/folderColors";
 import { getFolderPath } from "../../Shared/Utils/folderTree";
 import { toggleTask } from "../../Shared/Utils/markdown";
 import { extractHeadings } from "../../Shared/Utils/outline";
@@ -242,6 +245,13 @@ const NotePage = memo<NotePageProps>(({ noteId }) => {
       <TopBar
         left={
           <>
+            <ItemIconButton
+              item={{ type: "drawing", id: note.id }}
+              icon={note.icon}
+              size={16}
+              color={getFileIconHex(note)}
+              fallback={<NoteIcon size={16} />}
+            />
             <Breadcrumbs
               folderId={note.folderId}
               current={

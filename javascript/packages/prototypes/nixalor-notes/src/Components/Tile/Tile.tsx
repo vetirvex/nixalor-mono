@@ -5,6 +5,7 @@ import { MoreIcon, StarFilledIcon, StarIcon } from "../../Shared/Icons/Icons";
 import { Checkbox } from "../../Shared/Ui/Checkbox/Checkbox";
 import { IconButton } from "../../Shared/Ui/IconButton/IconButton";
 import { useMenu } from "../../Shared/Ui/Menu/useMenu";
+import { ItemIcon } from "../ItemIcon/ItemIcon";
 import { ItemMenu } from "../ItemMenu/ItemMenu";
 import classes from "./Tile.module.css";
 import type { TileProps } from "./TileTypes";
@@ -15,6 +16,8 @@ const Tile = memo<TileProps>(
     color,
     preview,
     title,
+    icon,
+    iconColor,
     meta,
     isFavorite,
     isSelected = false,
@@ -47,7 +50,10 @@ const Tile = memo<TileProps>(
         )}
         <div className={classes.footer}>
           <button type="button" className={classes.text} onClick={onOpen}>
-            <span className={classes.title}>{title}</span>
+            <span className={classes.title}>
+              <ItemIcon icon={icon} size={14} color={iconColor} fallback={null} />
+              {title}
+            </span>
             <span className={classes.meta}>{meta}</span>
           </button>
           <IconButton

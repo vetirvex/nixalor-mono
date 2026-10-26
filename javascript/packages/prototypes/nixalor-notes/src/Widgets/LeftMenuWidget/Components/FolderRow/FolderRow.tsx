@@ -1,5 +1,6 @@
 import { memo } from "react";
 import { ColorMark } from "../../../../Components/ColorMark/ColorMark";
+import { ItemIcon } from "../../../../Components/ItemIcon/ItemIcon";
 import { useNotes } from "../../../../Providers/NotesProvider/NotesContext";
 import { getFolderHex } from "../../../../Shared/Utils/folderColors";
 import { DrawingRow } from "../DrawingRow/DrawingRow";
@@ -21,7 +22,14 @@ const FolderRow = memo<FolderRowProps>(
         dropFolderId={folder.id}
         depth={depth}
         name={folder.name}
-        leading={<ColorMark color={getFolderHex(folder)} />}
+        leading={
+          <ItemIcon
+            icon={folder.icon}
+            size={15}
+            color={getFolderHex(folder)}
+            fallback={<ColorMark color={getFolderHex(folder)} />}
+          />
+        }
         trailing={tree.boardCounts.get(folder.id) || undefined}
         isActive={route.type === "folder" && route.id === folder.id}
         isExpanded={isExpanded}

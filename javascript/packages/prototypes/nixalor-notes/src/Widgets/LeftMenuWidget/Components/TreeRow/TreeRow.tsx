@@ -23,6 +23,7 @@ const TreeRow = memo<TreeRowProps>(
     name,
     leading,
     trailing,
+    badge,
     isActive = false,
     isEditing,
     isExpanded,
@@ -139,6 +140,7 @@ const TreeRow = memo<TreeRowProps>(
               {trailing !== undefined && (
                 <span className={classes.trailing}>{trailing}</span>
               )}
+              {badge}
               <IconButton
                 label={t("common.moreActions")}
                 size="xs"

@@ -12,6 +12,8 @@ interface Folder {
   color?: FolderColor;
   /** Set while the folder is starred; also orders the favorites list. */
   favoritedAt?: number | null;
+  /** Custom icon (see Shared/Icons/itemIcons); null/undefined = default. */
+  icon?: string | null;
   createdAt: number;
   updatedAt: number;
 }
@@ -29,6 +31,10 @@ interface Drawing {
   folderId: string | null;
   kind?: FileKind;
   favoritedAt?: number | null;
+  /** Custom icon (see Shared/Icons/itemIcons); null/undefined = default. */
+  icon?: string | null;
+  /** Color of the icon (custom or default); null/undefined = neutral. */
+  iconColor?: FolderColor | null;
   /** Last time the board was opened — powers "Recent". */
   openedAt?: number | null;
   createdAt: number;

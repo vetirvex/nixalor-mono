@@ -11,6 +11,8 @@ interface TreeRowProps {
   leading: ReactNode;
   /** Board count shown on folders. */
   trailing?: ReactNode;
+  /** Always visible, left of the hover actions (e.g. the "D" of drawings). */
+  badge?: ReactNode;
   isActive?: boolean;
   isEditing: boolean;
   /** Set for folders only. */

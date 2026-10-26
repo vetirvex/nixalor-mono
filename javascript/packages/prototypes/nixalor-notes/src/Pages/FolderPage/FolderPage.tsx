@@ -4,6 +4,7 @@ import type { BoardsView } from "../../Components/BoardsSection/BoardsSectionTyp
 import { Breadcrumbs } from "../../Components/Breadcrumbs/Breadcrumbs";
 import { ColorMark } from "../../Components/ColorMark/ColorMark";
 import { FolderChips } from "../../Components/FolderChips/FolderChips";
+import { ItemIconButton } from "../../Components/ItemIconButton/ItemIconButton";
 import { ItemMenu } from "../../Components/ItemMenu/ItemMenu";
 import { TopBar } from "../../Components/TopBar/TopBar";
 import { useLayout } from "../../Providers/LayoutProvider/LayoutContext";
@@ -98,7 +99,13 @@ const FolderPage = memo<FolderPageProps>(({ folderId }) => {
         <div className={classes.content}>
           <header className={classes.header}>
             <div className={classes.heading}>
-              <ColorMark color={getFolderHex(folder)} size={14} />
+              <ItemIconButton
+                item={{ type: "folder", id: folder.id }}
+                icon={folder.icon}
+                size={26}
+                color={getFolderHex(folder)}
+                fallback={<ColorMark color={getFolderHex(folder)} size={14} />}
+              />
               <div className={classes.titleRow}>
                 {isRenaming ? (
                   <NameInput

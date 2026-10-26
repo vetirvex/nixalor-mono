@@ -67,6 +67,10 @@ interface NotesContextValue {
   downloadDrawing: (id: string) => Promise<void>;
 
   toggleFavorite: (item: ItemRef) => Promise<void>;
+  /** Sets a custom icon ("icon:Rocket" / "emoji:🚀"); null restores the default. */
+  setItemIcon: (item: ItemRef, icon: string | null) => Promise<void>;
+  /** Board/note icon color; null = neutral. (Folders use setFolderColor.) */
+  setFileIconColor: (id: string, color: FolderColor | null) => Promise<void>;
   /** Deletes boards and folders (with their content) in one go. */
   deleteItems: (items: ItemRef[]) => Promise<void>;
 

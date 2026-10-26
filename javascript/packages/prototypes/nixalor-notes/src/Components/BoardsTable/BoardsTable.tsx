@@ -6,7 +6,9 @@ import { Checkbox } from "../../Shared/Ui/Checkbox/Checkbox";
 import { IconButton } from "../../Shared/Ui/IconButton/IconButton";
 import { useMenu } from "../../Shared/Ui/Menu/useMenu";
 import { NameInput } from "../../Shared/Ui/NameInput/NameInput";
+import { getFileIconHex } from "../../Shared/Utils/folderColors";
 import { FileThumbnail } from "../FileThumbnail/FileThumbnail";
+import { ItemIcon } from "../ItemIcon/ItemIcon";
 import { ItemMenu } from "../ItemMenu/ItemMenu";
 import classes from "./BoardsTable.module.css";
 import type { BoardsTableProps, BoardsTableRowProps } from "./BoardsTableTypes";
@@ -41,6 +43,12 @@ const BoardsTableRow = memo<BoardsTableRowProps>(
               />
             ) : (
               <button type="button" className={classes.name}>
+                <ItemIcon
+                  icon={board.icon}
+                  size={15}
+                  color={getFileIconHex(board)}
+                  fallback={null}
+                />
                 {board.name}
               </button>
             )}

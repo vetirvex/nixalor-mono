@@ -96,7 +96,6 @@ const en: Messages = {
 
   "tree.newBoardInside": "New board inside",
   "tree.newSubfolder": "New subfolder",
-  "tree.color": "Color",
 
   "board.saved": "Saved",
   "board.unsaved": "Unsaved",
@@ -194,6 +193,16 @@ const en: Messages = {
   "confirm.deleteFolderEmpty.message": 'Folder "{name}" will be deleted.',
   "confirm.deleteMany.title": "Delete selected items?",
   "confirm.deleteMany.message": "{count} items will be deleted. This can't be undone.",
+
+  "icon.title": "Icon and color",
+  "icon.change": "Icon and color",
+  "icon.color": "Color",
+  "icon.defaultColor": "No color",
+  "icon.tab.icons": "Icons",
+  "icon.tab.emoji": "Emoji",
+  "icon.search": "Search icons",
+  "icon.emojiPlaceholder": "Paste any emoji",
+  "icon.reset": "Reset",
 
   "settings.title": "Settings",
   "settings.section.app": "Application",

@@ -5,6 +5,7 @@ import type { Folder } from "../../Shared/Storage/StorageTypes";
 import { FOLDER_COLORS, getFolderHex } from "../../Shared/Utils/folderColors";
 import { byName } from "../../Shared/Utils/folderTree";
 import { ColorMark } from "../ColorMark/ColorMark";
+import { ItemIcon } from "../ItemIcon/ItemIcon";
 import classes from "./FolderPicker.module.css";
 import type { FolderPickerProps } from "./FolderPickerTypes";
 
@@ -58,7 +59,12 @@ const FolderPicker = memo<FolderPickerProps>(
             style={{ paddingLeft: 10 + depth * INDENT_PX }}
             onClick={() => onChange(folder.id)}
           >
-            <ColorMark color={getFolderHex(folder)} />
+            <ItemIcon
+              icon={folder.icon}
+              size={14}
+              color={getFolderHex(folder)}
+              fallback={<ColorMark color={getFolderHex(folder)} />}
+            />
             <span className={classes.name}>{folder.name}</span>
           </button>
         ))}
