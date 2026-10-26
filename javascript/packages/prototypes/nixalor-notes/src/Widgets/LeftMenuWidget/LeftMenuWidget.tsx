@@ -1,5 +1,6 @@
 import { memo, useCallback, useMemo, useState } from "react";
 import type { DragEvent } from "react";
+import { AppLogo } from "../../Components/AppLogo/AppLogo";
 import { useLayout } from "../../Providers/LayoutProvider/LayoutContext";
 import { useNotes } from "../../Providers/NotesProvider/NotesContext";
 import { useI18n } from "../../Shared/I18n/I18nContext";
@@ -92,7 +93,7 @@ const LeftMenuWidget = memo<LeftMenuWidgetProps>(() => {
       <TreeDndContext.Provider value={dnd}>
         <nav className={classes.panel} aria-label={t("nav.workspace")}>
           <div className={classes.workspace}>
-            <span className={classes.logo}>N</span>
+            <AppLogo size={30} className={classes.logo} />
             <span className={classes.workspaceText}>
               <span className={classes.workspaceName}>{t("app.name")}</span>
               <span className={classes.workspaceMeta}>

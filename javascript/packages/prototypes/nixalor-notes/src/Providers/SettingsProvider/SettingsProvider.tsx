@@ -2,6 +2,7 @@ import { memo, useCallback, useEffect, useMemo, useState } from "react";
 import { detectLanguage } from "../../Shared/I18n/I18nContext";
 import { I18nProvider } from "../../Shared/I18n/I18nProvider";
 import { LocalSettings } from "../../Shared/Storage/LocalSettings";
+import { applyFavicon } from "../../Shared/Utils/favicon";
 import { ACCENT_COLORS, SettingsContext } from "./SettingsContext";
 import type {
   ResolvedTheme,
@@ -63,6 +64,11 @@ const SettingsProvider = memo<SettingsProviderProps>(({ children }) => {
     root.dataset.accent = settings.accent;
     root.dataset.density = settings.compact ? "compact" : "comfortable";
   }, [theme, settings.accent, settings.compact]);
+
+  // The tab icon follows the accent color too.
+  useEffect(() => {
+    applyFavicon(settings.accent);
+  }, [settings.accent]);
 
   const updateSettings = useCallback((patch: Partial<Settings>) => {
     setSettings((prev) => {

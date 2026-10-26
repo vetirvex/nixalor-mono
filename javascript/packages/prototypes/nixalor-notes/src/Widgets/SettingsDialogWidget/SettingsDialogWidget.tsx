@@ -1,4 +1,5 @@
 import { memo, useId, useState } from "react";
+import { AppLogo } from "../../Components/AppLogo/AppLogo";
 import {
   ACCENT_COLORS,
   useSettings,
@@ -213,7 +214,7 @@ const SettingsDialogWidget = memo<SettingsDialogWidgetProps>(({ onClose }) => {
           <div className={classes.preview} aria-hidden="true">
             <div className={classes.previewSidebar}>
               <span className={classes.previewWorkspace}>
-                <span className={classes.previewLogo} />
+                <AppLogo size={18} className={classes.previewLogo} />
                 {t("app.name")}
               </span>
               <span className={classes.previewItem} data-active="true">

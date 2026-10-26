@@ -33,16 +33,8 @@
 }
 
 .logo {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 30px;
-  height: 30px;
-  border-radius: var(--radius-sm);
-  background: var(--accent);
-  color: var(--on-accent);
-  font-size: 14px;
-  font-weight: 800;
+  flex-shrink: 0;
+  user-select: none;
 }
 
 .workspace-text {

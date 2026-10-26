@@ -303,10 +303,7 @@
 }
 
 .preview-logo {
-  width: 16px;
-  height: 16px;
-  border-radius: 4px;
-  background: var(--accent);
+  flex-shrink: 0;
 }
 
 .preview-item {
