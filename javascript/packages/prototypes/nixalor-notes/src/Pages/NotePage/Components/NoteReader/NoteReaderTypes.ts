@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import type { RenderOptions } from "../../../../Shared/Utils/markdown";
 import type { Heading } from "../../../../Shared/Utils/outline";
 
@@ -8,6 +9,8 @@ interface NoteReaderHandle {
 
 interface NoteReaderProps {
   content: string;
+  /** Shown above the text (the editable file name). */
+  header?: ReactNode;
   linkExists: (target: string) => boolean;
   resolveBoard: RenderOptions["resolveBoard"];
   onOpenLink: (target: string) => void;

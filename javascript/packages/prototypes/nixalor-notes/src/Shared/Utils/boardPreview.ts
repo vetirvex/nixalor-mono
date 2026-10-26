@@ -15,7 +15,7 @@ const render = async (boardId: string) => {
     appState: { exportBackground: false, viewBackgroundColor: "transparent" },
     files: scene.files,
     exportPadding: 16,
-    skipInliningFonts: true,
+    // Fonts stay inlined: an SVG shown through <img> can't load external fonts.
   });
   return URL.createObjectURL(
     new Blob([svg.outerHTML], { type: "image/svg+xml;charset=utf-8" })

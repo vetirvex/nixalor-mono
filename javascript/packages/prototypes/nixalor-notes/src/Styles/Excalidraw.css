@@ -32,3 +32,17 @@
 .excalidraw .Dialog .confirm-dialog-buttons .ExcButton--color-primary {
   color: var(--on-accent);
 }
+
+/*
+ * Excalidraw sets bare `font-family: Assistant` (no fallback) on a few dialog
+ * elements; without that font they fall back to the browser's serif default.
+ */
+.excalidraw .ExcTextField__label,
+.excalidraw .ExcTextField__input input,
+.excalidraw .RadioGroup__choice,
+.excalidraw .ImageExportModal h3,
+.excalidraw .ImageExportModal__settings__setting__label,
+.excalidraw .OverwriteConfirm__Description,
+.excalidraw__embeddable-container .excalidraw__embeddable-hint {
+  font-family: var(--ui-font);
+}

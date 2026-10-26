@@ -27,6 +27,7 @@ import {
 } from "./markdownCommands";
 import classes from "./NoteEditor.module.css";
 import type { NoteEditorHandle, NoteEditorProps } from "./NoteEditorTypes";
+import { noteTitle, setNoteTitle } from "./noteTitle";
 import { createSlashCompletion, slashIcon } from "./slashCommands";
 import { createWikiLinkCompletion } from "./wikiLinkCompletion";
 
@@ -36,6 +37,9 @@ const NoteEditor = memo(
       {
         noteId,
         initialContent,
+        title,
+        titlePlaceholder,
+        onRename,
         onChange,
         onOpenLink,
         linkTargets,
@@ -57,6 +61,7 @@ const NoteEditor = memo(
       // CodeMirror extensions are created once; they read the latest props via refs.
       const propsRef = useRef({
         noteId,
+        onRename,
         onChange,
         onOpenLink,
         linkTargets,
@@ -71,6 +76,7 @@ const NoteEditor = memo(
       });
       propsRef.current = {
         noteId,
+        onRename,
         onChange,
         onOpenLink,
         linkTargets,
@@ -119,6 +125,11 @@ const NoteEditor = memo(
                 indentWithTab,
               ]),
               placeholder(hint),
+              noteTitle({
+                name: title,
+                placeholder: titlePlaceholder,
+                onRename: (name) => propsRef.current.onRename(name),
+              }),
               editorTheme,
               editorHighlighting,
               livePreview({
@@ -175,6 +186,12 @@ const NoteEditor = memo(
         // The editor owns its document after mount; later prop changes don't reset it.
         // eslint-disable-next-line react-hooks/exhaustive-deps
       }, []);
+
+      useEffect(() => {
+        viewRef.current?.dispatch({
+          effects: setNoteTitle.of({ name: title, placeholder: titlePlaceholder }),
+        });
+      }, [title, titlePlaceholder]);
 
       // New/renamed/deleted files change which links resolve — restyle them.
       useEffect(() => {

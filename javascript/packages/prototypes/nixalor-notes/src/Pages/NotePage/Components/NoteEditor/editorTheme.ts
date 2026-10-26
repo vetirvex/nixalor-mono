@@ -31,6 +31,9 @@ const editorTheme = EditorView.theme({
     padding: "40px 0 40vh",
   },
   ".cm-line": { padding: `0 ${GUTTER}` },
+  ".cm-note-title": { padding: `0 ${GUTTER}`, marginBottom: "0.5em" },
+  // Typing in the title: the text cursor would otherwise blink next to it.
+  "&:has(.cm-note-title textarea:focus) .cm-cursorLayer": { display: "none" },
   ".cm-cursor, .cm-dropCursor": {
     borderLeftColor: "var(--accent)",
     borderLeftWidth: "2px",

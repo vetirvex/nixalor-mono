@@ -6,6 +6,7 @@ import { SaveStatus } from "../../Components/SaveStatus/SaveStatus";
 import { TopBar } from "../../Components/TopBar/TopBar";
 import { useLayout } from "../../Providers/LayoutProvider/LayoutContext";
 import { useNotes } from "../../Providers/NotesProvider/NotesContext";
+import { useExportNotePdf } from "../../Shared/Hooks/useExportNotePdf";
 import { useI18n } from "../../Shared/I18n/I18nContext";
 import {
   EyeIcon,
@@ -34,6 +35,7 @@ import type { LinkTarget } from "./Components/NoteEditor/wikiLinkCompletion";
 import { NoteOutline } from "./Components/NoteOutline/NoteOutline";
 import { NoteReader } from "./Components/NoteReader/NoteReader";
 import type { NoteReaderHandle } from "./Components/NoteReader/NoteReaderTypes";
+import { NoteTitle } from "./Components/NoteTitle/NoteTitle";
 import classes from "./NotePage.module.css";
 import type { NoteMode, NotePageProps } from "./NotePageTypes";
 import { useNoteContent } from "./useNoteContent";
@@ -217,7 +219,13 @@ const NotePage = memo<NotePageProps>(({ noteId }) => {
     }
   }, [mode]);
 
-  // Cmd/Ctrl+E toggles reading mode, Cmd/Ctrl+S saves right away.
+  // The live text, so edits not yet autosaved make it into the PDF.
+  const exportNotePdf = useExportNotePdf();
+  const exportPdf = useCallback(() => {
+    void exportNotePdf(noteId, content ?? undefined);
+  }, [content, exportNotePdf, noteId]);
+
+  // Cmd/Ctrl+E toggles reading mode, Cmd/Ctrl+S saves, Cmd/Ctrl+P exports to PDF.
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
       if (!(event.ctrlKey || event.metaKey) || event.shiftKey || event.altKey) {
@@ -229,15 +237,20 @@ const NotePage = memo<NotePageProps>(({ noteId }) => {
       } else if (event.code === "KeyS") {
         event.preventDefault();
         save();
+      } else if (event.code === "KeyP") {
+        // Instead of printing the whole app UI.
+        event.preventDefault();
+        exportPdf();
       }
     };
     window.addEventListener("keydown", onKeyDown, { capture: true });
     return () => window.removeEventListener("keydown", onKeyDown, { capture: true });
-  }, [save, toggleMode]);
+  }, [exportPdf, save, toggleMode]);
 
   if (!note) {
     return null;
   }
+  const rename = (name: string) => void renameDrawing(note.id, name);
   const isFavorite = Boolean(note.favoritedAt);
 
   return (
@@ -259,7 +272,7 @@ const NotePage = memo<NotePageProps>(({ noteId }) => {
                   <NameInput
                     initialValue={note.name}
                     onSubmit={(name) => {
-                      void renameDrawing(note.id, name);
+                      rename(name);
                       setIsRenaming(false);
                     }}
                     onCancel={() => setIsRenaming(false)}
@@ -317,7 +330,11 @@ const NotePage = memo<NotePageProps>(({ noteId }) => {
                 },
               ]}
             />
-            <FileActionsMenu file={note} onRename={() => setIsRenaming(true)} />
+            <FileActionsMenu
+              file={note}
+              onRename={() => setIsRenaming(true)}
+              onExportPdf={exportPdf}
+            />
             <Button
               variant="primary"
               icon={<PlusIcon size={15} strokeWidth={2.5} />}
@@ -338,6 +355,9 @@ const NotePage = memo<NotePageProps>(({ noteId }) => {
                   ref={editorRef}
                   noteId={note.id}
                   initialContent={content}
+                  title={note.name}
+                  titlePlaceholder={t("note.titlePlaceholder")}
+                  onRename={rename}
                   onChange={update}
                   onOpenLink={openLink}
                   linkTargets={linkTargets}
@@ -357,6 +377,15 @@ const NotePage = memo<NotePageProps>(({ noteId }) => {
                 <NoteReader
                   ref={readerRef}
                   content={content}
+                  header={
+                    <NoteTitle
+                      // Remount so a rename from elsewhere resets the field.
+                      key={note.name}
+                      name={note.name}
+                      placeholder={t("note.titlePlaceholder")}
+                      onRename={rename}
+                    />
+                  }
                   resolveBoard={resolveBoard}
                   headings={headings}
                   foldedKeys={foldedKeys}

@@ -18,12 +18,13 @@ import { IconButton } from "../../Shared/Ui/IconButton/IconButton";
 import { toPointAnchor } from "../../Shared/Ui/Menu/anchor";
 import { Menu, MenuItem, MenuSeparator } from "../../Shared/Ui/Menu/Menu";
 import { useMenu } from "../../Shared/Ui/Menu/useMenu";
+import { MOD_KEY } from "../../Shared/Utils/platform";
 import { useConfirmDelete } from "../ItemMenu/useConfirmDelete";
 import type { FileActionsMenuProps } from "./FileActionsMenuTypes";
 
 /** "⋯" in the top bar of an open board or note: export/import and file actions. */
 const FileActionsMenu = memo<FileActionsMenuProps>(
-  ({ file, onRename, onExportImage }) => {
+  ({ file, onRename, onExportImage, onExportPdf }) => {
     const { t } = useI18n();
     const { downloadDrawing, duplicateDrawing } = useNotes();
     const { openMove, openIconPicker } = useLayout();
@@ -50,6 +51,14 @@ const FileActionsMenu = memo<FileActionsMenuProps>(
                 icon={<DownloadIcon />}
                 label={t("board.exportImage")}
                 onSelect={onExportImage}
+              />
+            )}
+            {onExportPdf && (
+              <MenuItem
+                icon={<DownloadIcon />}
+                label={t("note.exportPdf")}
+                shortcut={`${MOD_KEY}+P`}
+                onSelect={onExportPdf}
               />
             )}
             <MenuItem

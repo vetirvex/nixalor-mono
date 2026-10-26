@@ -46,6 +46,7 @@ const NoteReader = memo(
     (
       {
         content,
+        header,
         linkExists,
         resolveBoard,
         onOpenLink,
@@ -204,6 +205,7 @@ const NoteReader = memo(
 
       return (
         <div ref={containerRef} className={classes.noteReader}>
+          {header && <div className={classes.header}>{header}</div>}
           {content.trim() ? (
             <article
               ref={articleRef}

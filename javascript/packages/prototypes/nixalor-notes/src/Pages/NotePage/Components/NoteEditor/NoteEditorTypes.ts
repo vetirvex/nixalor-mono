@@ -17,6 +17,10 @@ interface NoteEditorProps {
   /** Pasted and dropped images are stored as this note's attachments. */
   noteId: string;
   initialContent: string;
+  /** File name shown as an editable heading above the text. */
+  title: string;
+  titlePlaceholder: string;
+  onRename: (name: string) => void;
   onChange: (content: string) => void;
   onOpenLink: (target: string) => void;
   /** Files offered after typing "[[". */

@@ -1,6 +1,7 @@
 import { memo } from "react";
 import { useLayout } from "../../Providers/LayoutProvider/LayoutContext";
 import { useNotes } from "../../Providers/NotesProvider/NotesContext";
+import { useExportNotePdf } from "../../Shared/Hooks/useExportNotePdf";
 import { useI18n } from "../../Shared/I18n/I18nContext";
 import {
   BoardIcon,
@@ -35,6 +36,7 @@ const ItemMenu = memo<ItemMenuProps>(({ item, anchor, onClose, onRename, align }
   } = useNotes();
   const { openCreate, openMove, openIconPicker } = useLayout();
   const confirmDelete = useConfirmDelete();
+  const exportNotePdf = useExportNotePdf();
 
   const entity =
     item.type === "folder"
@@ -109,6 +111,13 @@ const ItemMenu = memo<ItemMenuProps>(({ item, anchor, onClose, onRename, align }
             label={`${t("common.download")} ${isNote ? ".md" : ".excalidraw"}`}
             onSelect={() => void downloadDrawing(item.id)}
           />
+          {isNote && (
+            <MenuItem
+              icon={<DownloadIcon />}
+              label={t("note.exportPdf")}
+              onSelect={() => void exportNotePdf(item.id)}
+            />
+          )}
         </>
       )}
       <MenuSeparator />

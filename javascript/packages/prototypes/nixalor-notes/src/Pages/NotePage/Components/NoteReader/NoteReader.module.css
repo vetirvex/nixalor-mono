@@ -6,7 +6,7 @@
 
 .content,
 .empty {
-  max-width: 760px;
+  max-width: 824px;
   margin: 0 auto;
   padding: 40px 32px 30vh;
   font-size: 16px;
@@ -15,6 +15,18 @@
 
 .empty {
   color: var(--text-muted);
+}
+
+.header {
+  max-width: 824px;
+  margin: 0 auto;
+  padding: 40px 32px 0;
+  font-size: 16px;
+}
+
+.header + .content,
+.header + .empty {
+  padding-top: 0.5em;
 }
 
 .content > :first-child {

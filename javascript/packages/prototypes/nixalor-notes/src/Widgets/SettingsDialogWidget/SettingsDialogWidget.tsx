@@ -41,6 +41,7 @@ const SettingsDialogWidget = memo<SettingsDialogWidgetProps>(({ onClose }) => {
     { label: t("shortcuts.sidebar"), keys: `${MOD_KEY} \\` },
     { label: t("shortcuts.save"), keys: `${MOD_KEY} S` },
     { label: t("shortcuts.toggleReading"), keys: `${MOD_KEY} E` },
+    { label: t("note.exportPdf"), keys: `${MOD_KEY} P` },
     { label: t("shortcuts.bold"), keys: `${MOD_KEY} B / ${MOD_KEY} I` },
     { label: t("shortcuts.createSubmit"), keys: `${MOD_KEY} ↵` },
     { label: t("shortcuts.rename"), keys: "F2" },
