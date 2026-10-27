@@ -8,7 +8,6 @@ import reactRefresh from "eslint-plugin-react-refresh";
 import unusedImports from "eslint-plugin-unused-imports";
 import globals from "globals";
 import ts from "typescript-eslint";
-import requireDisplayName from "./eslint-rules/require-display-name.js";
 
 export default [
   {
@@ -83,7 +82,6 @@ export default [
       react,
       "react-hooks": reactHooks,
       "react-refresh": reactRefresh,
-      local: { rules: { "require-display-name": requireDisplayName } },
     },
     settings: {
       react: { version: "detect" },
