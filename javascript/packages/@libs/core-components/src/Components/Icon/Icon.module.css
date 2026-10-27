@@ -1,0 +1,8 @@
+.icon {
+    display: flex;
+}
+
+.icon svg {
+    width: 100%;
+    height: 100%;
+}
