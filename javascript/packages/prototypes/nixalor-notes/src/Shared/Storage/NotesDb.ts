@@ -4,6 +4,7 @@ import type {
   DrawingScene,
   Folder,
   NoteContent,
+  NotesSnapshot,
 } from "./StorageTypes";
 
 const DB_NAME = "nixalor-notes";
@@ -186,6 +187,46 @@ const NotesDb = {
     runTransaction([DRAWINGS, SCENES], (tx) => {
       tx.objectStore(SCENES).put(scene);
       tx.objectStore(DRAWINGS).put(drawing);
+    }),
+
+  /** Everything in the database, for a backup. */
+  getSnapshot: async (): Promise<NotesSnapshot> => {
+    const db = await openDb();
+    const tx = db.transaction([FOLDERS, DRAWINGS, SCENES, NOTES, ATTACHMENTS]);
+    const [folders, drawings, scenes, notes, attachments] = await Promise.all([
+      promisifyRequest<Folder[]>(tx.objectStore(FOLDERS).getAll()),
+      promisifyRequest<Drawing[]>(tx.objectStore(DRAWINGS).getAll()),
+      promisifyRequest<DrawingScene[]>(tx.objectStore(SCENES).getAll()),
+      promisifyRequest<NoteContent[]>(tx.objectStore(NOTES).getAll()),
+      promisifyRequest<Attachment[]>(tx.objectStore(ATTACHMENTS).getAll()),
+    ]);
+    return { folders, drawings, scenes, notes, attachments };
+  },
+
+  /**
+   * Restores a backup atomically: records are written by id, so items from the
+   * backup replace their current versions and everything else stays.
+   */
+  restoreSnapshot: (snapshot: NotesSnapshot) =>
+    runTransaction([FOLDERS, DRAWINGS, SCENES, NOTES, ATTACHMENTS], (tx) => {
+      snapshot.folders.forEach((item) => tx.objectStore(FOLDERS).put(item));
+      snapshot.drawings.forEach((item) => tx.objectStore(DRAWINGS).put(item));
+      snapshot.scenes.forEach((item) => tx.objectStore(SCENES).put(item));
+      snapshot.notes.forEach((item) => tx.objectStore(NOTES).put(item));
+      const attachments = tx.objectStore(ATTACHMENTS);
+      snapshot.attachments.forEach((item) => attachments.put(item));
+      // A restored note gets exactly the images from the backup.
+      const restoredIds = new Set(snapshot.attachments.map((item) => item.id));
+      snapshot.notes.forEach((note) => {
+        attachments.index("noteId").getAllKeys(IDBKeyRange.only(note.id)).onsuccess = (
+          event
+        ) => {
+          const keys = (event.target as IDBRequest<IDBValidKey[]>).result;
+          keys
+            .filter((key) => !restoredIds.has(String(key)))
+            .forEach((key) => attachments.delete(key));
+        };
+      });
     }),
 };
 

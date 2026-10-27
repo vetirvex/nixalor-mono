@@ -5,6 +5,7 @@ import type {
   FileKind,
   Folder,
   FolderColor,
+  NotesSnapshot,
 } from "../../Shared/Storage/StorageTypes";
 
 /** What the main area shows. Persisted, so a reload returns to the same place. */
@@ -65,6 +66,10 @@ interface NotesContextValue {
   moveDrawing: (id: string, folderId: string | null) => Promise<void>;
   duplicateDrawing: (id: string) => Promise<Drawing | null>;
   downloadDrawing: (id: string) => Promise<void>;
+  /** Downloads every folder, board, note and image as one .zip. */
+  exportBackup: () => Promise<void>;
+  /** Writes a backup into the database (same ids are replaced) and reloads the tree. */
+  restoreBackup: (snapshot: NotesSnapshot) => Promise<void>;
 
   toggleFavorite: (item: ItemRef) => Promise<void>;
   /** Sets a custom icon ("icon:Rocket" / "emoji:🚀"); null restores the default. */

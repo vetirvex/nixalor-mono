@@ -8,9 +8,11 @@ import type {
   DrawingScene,
   Folder,
   FolderColor,
+  NotesSnapshot,
 } from "../../Shared/Storage/StorageTypes";
 import { getFileKind } from "../../Shared/Storage/StorageTypes";
 import { copyAttachments, inlineAttachments } from "../../Shared/Utils/attachments";
+import { createBackup, getBackupFileName } from "../../Shared/Utils/backup";
 import { createId } from "../../Shared/Utils/createId";
 import { downloadFile } from "../../Shared/Utils/downloadFile";
 import { pickNextFolderColor } from "../../Shared/Utils/folderColors";
@@ -407,6 +409,28 @@ const NotesProvider = memo<NotesProviderProps>(({ children }) => {
     );
   }, []);
 
+  const exportBackup = useCallback(async () => {
+    const backup = await createBackup(await NotesDb.getSnapshot());
+    downloadFile(backup, getBackupFileName());
+  }, []);
+
+  const restoreBackup = useCallback(
+    async (snapshot: NotesSnapshot) => {
+      // Close the open file first: its editor flushes pending edits on unmount,
+      // and that save must land before the restore, not overwrite it.
+      navigate(START);
+      await new Promise((resolve) => window.setTimeout(resolve, 100));
+      await NotesDb.restoreSnapshot(snapshot);
+      const [storedFolders, storedDrawings] = await Promise.all([
+        NotesDb.getFolders(),
+        NotesDb.getDrawings(),
+      ]);
+      setFolders(storedFolders);
+      setDrawings(storedDrawings);
+    },
+    [navigate, setDrawings, setFolders]
+  );
+
   const toggleFavorite = useCallback(
     async (item: ItemRef) => {
       // Favoriting is metadata — don't bump updatedAt, which drives "Modified" sorting.
@@ -527,6 +551,8 @@ const NotesProvider = memo<NotesProviderProps>(({ children }) => {
       moveDrawing,
       duplicateDrawing,
       downloadDrawing,
+      exportBackup,
+      restoreBackup,
       toggleFavorite,
       setItemIcon,
       setFileIconColor,
@@ -556,6 +582,8 @@ const NotesProvider = memo<NotesProviderProps>(({ children }) => {
       moveDrawing,
       duplicateDrawing,
       downloadDrawing,
+      exportBackup,
+      restoreBackup,
       toggleFavorite,
       setItemIcon,
       setFileIconColor,

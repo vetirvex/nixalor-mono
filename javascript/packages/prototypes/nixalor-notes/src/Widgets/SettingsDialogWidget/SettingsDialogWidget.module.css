@@ -435,17 +435,9 @@
   }
 }
 
-/* Touch phones: keyboard shortcuts don't apply, so appearance is the only section. */
+/* Touch phones: keyboard shortcuts don't apply. */
 @media (max-width: 720px) and (pointer: coarse) {
-  .layout {
-    grid-template-rows: minmax(0, 1fr);
-  }
-
-  .nav {
+  .nav-item[data-section="shortcuts"] {
     display: none;
-  }
-
-  .main-header {
-    padding-top: 16px;
   }
 }

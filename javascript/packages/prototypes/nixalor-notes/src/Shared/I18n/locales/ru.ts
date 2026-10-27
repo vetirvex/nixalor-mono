@@ -247,6 +247,24 @@ const ru = {
   "settings.preview": "Предпросмотр",
   "settings.autosave": "Изменения сохраняются автоматически",
   "settings.reset": "Сбросить по умолчанию",
+  "settings.data": "Данные",
+  "settings.backupExport": "Экспорт резервной копии",
+  "settings.backupExportHint":
+    "Все папки, доски, заметки и картинки в одном .zip. Внутри заметки — обычные .md, доски — .excalidraw.",
+  "settings.backupExportAction": "Скачать .zip",
+  "settings.backupImport": "Восстановить из копии",
+  "settings.backupImportHint":
+    "Возвращает всё из .zip. То, что есть в копии, заменяется сохранённой версией; остальное не трогается.",
+  "settings.backupImportAction": "Выбрать .zip…",
+  "settings.backupWorking": "Подождите…",
+  "settings.backupDone": "Восстановлено: {folders}, {boards}, {notes}.",
+  "settings.backupConfirmTitle": "Восстановить из копии?",
+  "settings.backupConfirmMessage":
+    "В копии от {date}: {folders}, {boards} и {notes}. Уже существующие элементы будут заменены версией из копии.",
+  "settings.backupConfirm": "Восстановить",
+  "settings.backupInvalid":
+    "Не удалось прочитать «{name}»: это не резервная копия Nixalor Notes.",
+  "settings.backupExportFailed": "Не удалось создать резервную копию.",
 
   "shortcuts.palette": "Быстрый переход и команды",
   "shortcuts.sidebar": "Показать / скрыть сайдбар",

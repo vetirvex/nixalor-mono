@@ -70,6 +70,15 @@ interface Attachment {
   blob: Blob;
 }
 
+/** All stored records at once — what a backup holds. */
+interface NotesSnapshot {
+  folders: Folder[];
+  drawings: Drawing[];
+  scenes: DrawingScene[];
+  notes: NoteContent[];
+  attachments: Attachment[];
+}
+
 const getFileKind = (drawing: Pick<Drawing, "kind">): FileKind => drawing.kind ?? "board";
 
 export { getFileKind };
@@ -81,5 +90,6 @@ export type {
   Folder,
   FolderColor,
   NoteContent,
+  NotesSnapshot,
   SavedAppState,
 };

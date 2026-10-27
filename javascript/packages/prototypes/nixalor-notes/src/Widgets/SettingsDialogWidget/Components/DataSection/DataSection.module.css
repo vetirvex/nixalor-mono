@@ -1,0 +1,59 @@
+.fields {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 26px;
+  padding: 12px 28px 24px;
+  overflow: auto;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.row-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.label {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.hint {
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+.action {
+  flex-shrink: 0;
+}
+
+.status {
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+.status[data-type="error"] {
+  color: var(--danger);
+}
+
+@media (max-width: 720px) {
+  .fields {
+    padding: 10px 16px 24px;
+  }
+
+  .row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .action {
+    min-height: 44px;
+  }
+}

@@ -2,6 +2,6 @@ interface SettingsDialogWidgetProps {
   onClose: () => void;
 }
 
-type SettingsSection = "appearance" | "shortcuts";
+type SettingsSection = "appearance" | "shortcuts" | "data";
 
 export type { SettingsDialogWidgetProps, SettingsSection };

@@ -3,25 +3,13 @@ import { useCallback } from "react";
 import { useNotes } from "../../Providers/NotesProvider/NotesContext";
 import { useI18n } from "../I18n/I18nContext";
 import { extractInlineImages } from "../Utils/attachments";
+import { pickFile } from "../Utils/pickFile";
 import { buildSceneContent } from "../Utils/scene";
 
 const MARKDOWN_FILE = /\.(md|markdown|txt)$/i;
 
 const stripExtension = (fileName: string) =>
   fileName.replace(/\.(excalidraw|json|md|markdown|txt)$/i, "");
-
-const pickFile = () =>
-  new Promise<File | null>((resolve) => {
-    const input = document.createElement("input");
-    input.type = "file";
-    // No `accept` filter on purpose: macOS has no system file type for
-    // ".excalidraw", so Finder greys those files out. Content is validated instead.
-    input.addEventListener("change", () => resolve(input.files?.[0] ?? null), {
-      once: true,
-    });
-    input.addEventListener("cancel", () => resolve(null), { once: true });
-    input.click();
-  });
 
 /**
  * Picks a file and creates a new board (.excalidraw) or note (.md) from it;

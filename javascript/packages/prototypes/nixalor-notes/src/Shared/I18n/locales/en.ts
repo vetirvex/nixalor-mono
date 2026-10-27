@@ -226,6 +226,23 @@ const en: Messages = {
   "settings.preview": "Preview",
   "settings.autosave": "Changes are saved automatically",
   "settings.reset": "Reset to defaults",
+  "settings.data": "Data",
+  "settings.backupExport": "Export backup",
+  "settings.backupExportHint":
+    "All folders, boards, notes and images in one .zip file. Inside, notes are plain .md and boards are .excalidraw.",
+  "settings.backupExportAction": "Download .zip",
+  "settings.backupImport": "Restore from backup",
+  "settings.backupImportHint":
+    "Brings back everything from the .zip. Items that are in the backup are replaced with their saved version; nothing else is touched.",
+  "settings.backupImportAction": "Choose .zip…",
+  "settings.backupWorking": "Working…",
+  "settings.backupDone": "Restored: {folders}, {boards}, {notes}.",
+  "settings.backupConfirmTitle": "Restore from backup?",
+  "settings.backupConfirmMessage":
+    "The backup from {date} has {folders}, {boards} and {notes}. Items that already exist will be replaced with the version from the backup.",
+  "settings.backupConfirm": "Restore",
+  "settings.backupInvalid": "Couldn't read \"{name}\": it isn't a Nixalor Notes backup.",
+  "settings.backupExportFailed": "Couldn't create the backup.",
 
   "shortcuts.palette": "Quick switcher and commands",
   "shortcuts.sidebar": "Show / hide sidebar",

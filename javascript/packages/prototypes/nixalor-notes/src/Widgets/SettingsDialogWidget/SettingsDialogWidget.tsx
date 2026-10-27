@@ -10,8 +10,8 @@ import type {
   ThemeMode,
 } from "../../Providers/SettingsProvider/SettingsTypes";
 import { LANGUAGES, useI18n } from "../../Shared/I18n/I18nContext";
-import type { Language } from "../../Shared/I18n/I18nTypes";
-import { CloseIcon, KeyboardIcon, PaletteIcon } from "../../Shared/Icons/Icons";
+import type { Language, MessageKey } from "../../Shared/I18n/I18nTypes";
+import { CloseIcon, KeyboardIcon, PaletteIcon, SaveIcon } from "../../Shared/Icons/Icons";
 import { Button } from "../../Shared/Ui/Button/Button";
 import { ColorSwatches } from "../../Shared/Ui/ColorSwatches/ColorSwatches";
 import { Dialog } from "../../Shared/Ui/Dialog/Dialog";
@@ -19,6 +19,7 @@ import { IconButton } from "../../Shared/Ui/IconButton/IconButton";
 import { Kbd } from "../../Shared/Ui/Kbd/Kbd";
 import { Segmented } from "../../Shared/Ui/Segmented/Segmented";
 import { MOD_KEY } from "../../Shared/Utils/platform";
+import { DataSection } from "./Components/DataSection/DataSection";
 import classes from "./SettingsDialogWidget.module.css";
 import type {
   SettingsDialogWidgetProps,
@@ -28,6 +29,11 @@ import type {
 const THEME_MODES: ThemeMode[] = ["dark", "light", "system"];
 const ACCENTS = Object.keys(ACCENT_COLORS) as AccentColor[];
 const BOARD_FONTS: BoardFont[] = ["hand", "normal", "mono"];
+const SECTION_TITLES: Record<SettingsSection, MessageKey> = {
+  appearance: "settings.appearance",
+  shortcuts: "settings.shortcuts",
+  data: "settings.data",
+};
 
 const SettingsDialogWidget = memo<SettingsDialogWidgetProps>(({ onClose }) => {
   const { t } = useI18n();
@@ -74,21 +80,27 @@ const SettingsDialogWidget = memo<SettingsDialogWidgetProps>(({ onClose }) => {
           <button
             type="button"
             className={classes.navItem}
+            data-section="shortcuts"
             aria-current={section === "shortcuts" ? "page" : undefined}
             onClick={() => setSection("shortcuts")}
           >
             <KeyboardIcon size={15} />
             {t("settings.shortcuts")}
           </button>
+          <button
+            type="button"
+            className={classes.navItem}
+            aria-current={section === "data" ? "page" : undefined}
+            onClick={() => setSection("data")}
+          >
+            <SaveIcon size={15} />
+            {t("settings.data")}
+          </button>
         </nav>
 
         <div className={classes.main}>
           <div className={classes.mainHeader}>
-            <h2 className={classes.sectionTitle}>
-              {section === "appearance"
-                ? t("settings.appearance")
-                : t("settings.shortcuts")}
-            </h2>
+            <h2 className={classes.sectionTitle}>{t(SECTION_TITLES[section])}</h2>
             <IconButton label={t("common.close")} variant="filled" onClick={onClose}>
               <CloseIcon size={18} />
             </IconButton>
@@ -191,6 +203,8 @@ const SettingsDialogWidget = memo<SettingsDialogWidgetProps>(({ onClose }) => {
                 </select>
               </section>
             </div>
+          ) : section === "data" ? (
+            <DataSection />
           ) : (
             <ul className={classes.shortcuts}>
               {shortcuts.map((shortcut) => (
@@ -207,7 +221,10 @@ const SettingsDialogWidget = memo<SettingsDialogWidgetProps>(({ onClose }) => {
               <span className={classes.dot} />
               {t("settings.autosave")}
             </p>
-            <Button onClick={resetSettings}>{t("settings.reset")}</Button>
+            {/* Settings reset only — kept off the Data tab so it isn't read as wiping data. */}
+            {section !== "data" ? (
+              <Button onClick={resetSettings}>{t("settings.reset")}</Button>
+            ) : null}
           </div>
         </div>
 
