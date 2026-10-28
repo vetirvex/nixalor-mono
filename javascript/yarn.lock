@@ -1505,16 +1505,15 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@nix/nixalor-notes-ui@workspace:packages/projects/nixalor-notes/nixalor-notes-ui":
+"@nix/notes-auth-service@workspace:packages/projects/notes/notes-auth-service":
   version: 0.0.0-use.local
-  resolution: "@nix/nixalor-notes-ui@workspace:packages/projects/nixalor-notes/nixalor-notes-ui"
-  dependencies:
-    "@excalidraw/excalidraw": "npm:^0.18.1"
-    "@types/react": "npm:^19.3.0"
-    "@types/react-dom": "npm:^19.3.0"
-    react: "npm:^19.3.1"
-    react-dom: "npm:^19.3.1"
-    vite: "npm:^8.3.5"
+  resolution: "@nix/notes-auth-service@workspace:packages/projects/notes/notes-auth-service"
+  languageName: unknown
+  linkType: soft
+
+"@nix/runtime-flags@workspace:packages/@libs/runtime-flags":
+  version: 0.0.0-use.local
+  resolution: "@nix/runtime-flags@workspace:packages/@libs/runtime-flags"
   languageName: unknown
   linkType: soft
 
