@@ -1,0 +1,12 @@
+{
+  "name": "@nix/notes-auth-service",
+  "version": "0.1.0",
+  "type": "module",
+  "private": true,
+  "devDependencies": {
+    "typescript": "^5.8.2"
+  },
+  "dependencies": {
+    "fastify": "^5.12.7"
+  }
+}
